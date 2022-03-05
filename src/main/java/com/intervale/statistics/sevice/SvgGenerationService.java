@@ -14,9 +14,12 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class SvgGenerationService {
@@ -29,7 +32,7 @@ public class SvgGenerationService {
             });
         });
         JFreeChart chart = ChartFactory.createLineChart(
-                "Changing the price of the " + rate.getTitle() + " book Cost in BLR" +rate.getPrice(),
+                "Changing the price of the " + rate.getTitle() + " book Cost in BLR:" +rate.getPrice(),
                 "Date",
                 "different currency", dataset);
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
@@ -42,16 +45,21 @@ public class SvgGenerationService {
     }
 
 
-    public void createSvg(SimpleBankCurrencyExchangeRateDto<Map<String, Map<String, BigDecimal>>> simpleBankCurrencyExchangeRateDto) {
+    public byte[] createSvg(SimpleBankCurrencyExchangeRateDto<Map<String, Map<String, BigDecimal>>> simpleBankCurrencyExchangeRateDto) {
         JFreeChart chart = createChart(simpleBankCurrencyExchangeRateDto);
-        SVGGraphics2D g2 = new SVGGraphics2D(1000, 900);
-        Rectangle r = new Rectangle(0, 0, 1000, 900);
+        SVGGraphics2D g2 = new SVGGraphics2D(900, 1000);
+        Rectangle r = new Rectangle(0, 0, 900, 1000);
         chart.draw(g2, r);
-        File f = new File("Result.svg");
+        File f = new File("./src/main/resources/WEB-INF/img/"+ UUID.randomUUID() +"-result.svg");
+        byte[] data = new byte[0];
         try {
             SVGUtils.writeToSVG(f, g2.getSVGElement());
+            InputStream inputStream = new FileInputStream(f);
+            data = new byte[(int) f.length()];
+            inputStream.read(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return data;
     }
 }
