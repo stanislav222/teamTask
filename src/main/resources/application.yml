@@ -1,0 +1,17 @@
+spring:
+  liquibase:
+    enabled: true
+
+  datasource:
+    url: jdbc:postgresql://${DATASOURCE_HOST:localhost}:5434/postgres
+    password: postgres
+    username: postgres
+
+
+alfa-bank:
+  setting:
+    base-url: https://developerhub.alfabank.by:8273
+
+
+
+

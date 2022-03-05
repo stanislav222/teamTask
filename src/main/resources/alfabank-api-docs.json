@@ -1,0 +1,425 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "partner.public",
+    "version": "1.0.1",
+    "description": "API для работы с публичными методами"
+  },
+  "tags": [
+    {
+      "name": "public",
+      "description": "Публичные сервисы"
+    }
+  ],
+  "paths": {
+    "/banks": {
+      "get": {
+        "tags": [
+          "public"
+        ],
+        "summary": "Коды банков",
+        "description": "Возвращает коды банков Беларуси и России",
+        "operationId": "getBanks",
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Тип справочника: by - коды банков РБ, ru - коды банков РФ",
+            "required": true,
+            "type": "string",
+            "pattern": "by|ru"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Поиск по bic и name банка",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "description": "Номер страницы (по умолчанию - 1, все банки - 0)",
+            "required": false,
+            "type": "integer",
+            "minimum": 0,
+            "format": "int32"
+          },
+          {
+            "name": "pageRowCount",
+            "in": "query",
+            "description": "Число строк на странице (по умолчанию - 50, все банки - 0)",
+            "required": false,
+            "type": "integer",
+            "minimum": 0,
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное выполнение запроса",
+            "schema": {
+              "$ref": "#/definitions/BankListResponse"
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "schema": {
+              "$ref": "#/definitions/ShortErrorModel"
+            }
+          },
+          "500": {
+            "description": "Ошибка выполнения запроса",
+            "schema": {
+              "$ref": "#/definitions/ShortErrorModel"
+            }
+          }
+        },
+        "x-st-position": 3,
+        "x-st-code-samples": [
+          {
+            "lang": "cURL",
+            "sample": "curl -X GET \\\r\n  'https://developerhub.alfabank.by:8273/partner/1.0.1/public/banks?type=by&search=ALFABY2X'\r\n"
+          },
+          {
+            "lang": "Java",
+            "sample": "OkHttpClient client = new OkHttpClient();\r\n\r\nRequest request = new Request.Builder()\r\n  .url(\"https://developerhub.alfabank.by:8273/partner/1.0.1/public/banks?type=by&search=ALFABY2X\")\r\n  .get()\r\n  .build();\r\n\r\nResponse response = client.newCall(request).execute();\r\n"
+          },
+          {
+            "lang": "Node",
+            "sample": "var request = require(\"request\");\r\n\r\nvar options = { method: 'GET',\r\n  url: 'https://developerhub.alfabank.by:8273/partner/1.0.1/public/banks',\r\n  qs: { type: 'by', search: 'ALFABY2X' } };\r\n\r\nrequest(options, function (error, response, body) {\r\n  if (error) throw new Error(error);\r\n\r\n  console.log(body);\r\n});\r\n"
+          },
+          {
+            "lang": "Swift",
+            "sample": "import Foundation\r\n\r\nlet request = NSMutableURLRequest(url: NSURL(string: \"https://developerhub.alfabank.by:8273/partner/1.0.1/public/banks?type=by&search=ALFABY2X\")! as URL,\r\n                                        cachePolicy: .useProtocolCachePolicy,\r\n                                    timeoutInterval: 10.0)\r\nrequest.httpMethod = \"GET\"\r\n\r\nlet session = URLSession.shared\r\nlet dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in\r\n  if (error != nil) {\r\n    print(error)\r\n  } else {\r\n    let httpResponse = response as? HTTPURLResponse\r\n    print(httpResponse)\r\n  }\r\n})\r\n\r\ndataTask.resume()\r\n"
+          }
+        ],
+        "x-auth-type": "None",
+        "x-throttling-tier": "1KPerMin"
+      }
+    },
+    "/nationalRates": {
+      "get": {
+        "tags": [
+          "public"
+        ],
+        "summary": "Курсы валют Национального банка Республики Беларусь",
+        "description": "Возвращает курсы валют, установленные Национальным банком Республики Беларусь",
+        "operationId": "getNationalRates",
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Дата курса (по умолчанию - актуальный курс на сегодняшний день)",
+            "required": false,
+            "type": "string",
+            "pattern": "^[0,1]?\\d{1}\\.(([0-2]?\\d{1})|([3][0,1]{1}))\\.(([1]{1}[9]{1}[9]{1}\\d{1})|([2-9]{1}\\d{3}))$"
+          },
+          {
+            "name": "currencyCode",
+            "in": "query",
+            "description": "Код валюты (по умолчанию - все)",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "collectionFormat": "multi",
+            "maxItems": 50,
+            "minItems": 0
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное выполнение запроса",
+            "schema": {
+              "$ref": "#/definitions/NationalRateListResponse"
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "schema": {
+              "$ref": "#/definitions/ShortErrorModel"
+            }
+          },
+          "500": {
+            "description": "Ошибка выполнения запроса",
+            "schema": {
+              "$ref": "#/definitions/ShortErrorModel"
+            }
+          }
+        },
+        "x-st-position": 2,
+        "x-st-code-samples": [
+          {
+            "lang": "cURL",
+            "sample": "curl -X GET \\\r\n  'https://developerhub.alfabank.by:8273/partner/1.0.1/public/nationalRates?currencyCode=840,978'\r\n"
+          },
+          {
+            "lang": "Java",
+            "sample": "OkHttpClient client = new OkHttpClient();\r\n\r\nRequest request = new Request.Builder()\r\n  .url(\"https://developerhub.alfabank.by:8273/partner/1.0.1/public/nationalRates?currencyCode=840,978\")\r\n  .get()\r\n  .build();\r\n\r\nResponse response = client.newCall(request).execute();\r\n"
+          },
+          {
+            "lang": "Node",
+            "sample": "var request = require(\"request\");\r\n\r\nvar options = { method: 'GET',\r\n  url: 'https://developerhub.alfabank.by:8273/partner/1.0.1/public/nationalRates',\r\n  qs: { currencyCode: '840,978' } };\r\n\r\nrequest(options, function (error, response, body) {\r\n  if (error) throw new Error(error);\r\n\r\n  console.log(body);\r\n});\r\n"
+          },
+          {
+            "lang": "Swift",
+            "sample": "import Foundation\r\n\r\nlet request = NSMutableURLRequest(url: NSURL(string: \"https://developerhub.alfabank.by:8273/partner/1.0.1/public/nationalRates?currencyCode=840,978\")! as URL,\r\n                                        cachePolicy: .useProtocolCachePolicy,\r\n                                    timeoutInterval: 10.0)\r\nrequest.httpMethod = \"GET\"\r\n\r\nlet session = URLSession.shared\r\nlet dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in\r\n  if (error != nil) {\r\n    print(error)\r\n  } else {\r\n    let httpResponse = response as? HTTPURLResponse\r\n    print(httpResponse)\r\n  }\r\n})\r\n\r\ndataTask.resume()\r\n"
+          }
+        ],
+        "x-auth-type": "None",
+        "x-throttling-tier": "1KPerMin"
+      }
+    },
+    "/rates": {
+      "get": {
+        "tags": [
+          "public"
+        ],
+        "summary": "Курсы валют банка",
+        "description": "Возвращает актуальные на сегодня основные курсы валют банка для бизнеса",
+        "operationId": "getRates",
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Успешное выполнение запроса",
+            "schema": {
+              "$ref": "#/definitions/RateListResponse"
+            }
+          },
+          "500": {
+            "description": "Ошибка выполнения запроса",
+            "schema": {
+              "$ref": "#/definitions/ShortErrorModel"
+            }
+          }
+        },
+        "x-st-position": 1,
+        "x-st-code-samples": [
+          {
+            "lang": "cURL",
+            "sample": "curl -X GET \\\r\n  https://developerhub.alfabank.by:8273/partner/1.0.1/public/rates\r\n"
+          },
+          {
+            "lang": "Java",
+            "sample": "OkHttpClient client = new OkHttpClient();\r\n\r\nRequest request = new Request.Builder()\r\n  .url(\"https://developerhub.alfabank.by:8273/partner/1.0.1/public/rates\")\r\n  .get()\r\n  .build();\r\n\r\nResponse response = client.newCall(request).execute();\r\n"
+          },
+          {
+            "lang": "Node",
+            "sample": "var request = require(\"request\");\r\n\r\nvar options = { method: 'GET',\r\n  url: 'https://developerhub.alfabank.by:8273/partner/1.0.1/public/rates' };\r\n\r\nrequest(options, function (error, response, body) {\r\n  if (error) throw new Error(error);\r\n\r\n  console.log(body);\r\n});\r\n"
+          },
+          {
+            "lang": "Swift",
+            "sample": "import Foundation\r\n\r\nlet request = NSMutableURLRequest(url: NSURL(string: \"https://developerhub.alfabank.by:8273/partner/1.0.1/public/rates\")! as URL,\r\n                                        cachePolicy: .useProtocolCachePolicy,\r\n                                    timeoutInterval: 10.0)\r\nrequest.httpMethod = \"GET\"\r\n\r\nlet session = URLSession.shared\r\nlet dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in\r\n  if (error != nil) {\r\n    print(error)\r\n  } else {\r\n    let httpResponse = response as? HTTPURLResponse\r\n    print(httpResponse)\r\n  }\r\n})\r\n\r\ndataTask.resume()\r\n"
+          }
+        ],
+        "x-auth-type": "None",
+        "x-throttling-tier": "1KPerMin"
+      }
+    }
+  },
+  "definitions": {
+    "Bank": {
+      "type": "object",
+      "properties": {
+        "bic": {
+          "type": "string",
+          "description": "Код банка"
+        },
+        "name": {
+          "type": "string",
+          "description": "Наименование банка"
+        },
+        "address": {
+          "type": "string",
+          "description": "Адрес банка"
+        }
+      },
+      "description": "Банк"
+    },
+    "BankListResponse": {
+      "type": "object",
+      "properties": {
+        "totalRowCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Полное количество строк в выборке"
+        },
+        "banks": {
+          "type": "array",
+          "description": "Список банков",
+          "items": {
+            "$ref": "#/definitions/Bank"
+          }
+        }
+      },
+      "description": "Выходная модель, содержащая список всех банков"
+    },
+    "NationalRate": {
+      "type": "object",
+      "properties": {
+        "rate": {
+          "type": "number",
+          "description": "Курс Национального банка Республики Беларусь"
+        },
+        "iso": {
+          "type": "string",
+          "description": "Мнемоника валюты"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Код валюты"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Количество валюты"
+        },
+        "date": {
+          "type": "string",
+          "pattern": "^[0,1]?\\d{1}\\.(([0-2]?\\d{1})|([3][0,1]{1}))\\.(([1]{1}[9]{1}[9]{1}\\d{1})|([2-9]{1}\\d{3}))$",
+          "example": "06.08.2019",
+          "description": "Дата начала действия курса"
+        },
+        "name": {
+          "type": "string",
+          "description": "Наименование валюты"
+        }
+      },
+      "description": "Курс валюты Национального банка Республики Беларусь"
+    },
+    "NationalRateListResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "description": "Список курсов валют Национального банка Республики Беларусь",
+          "items": {
+            "$ref": "#/definitions/NationalRate"
+          }
+        }
+      },
+      "description": "Выходная модель, содержащая курсы валют Национального банка Республики Беларусь"
+    },
+    "Rate": {
+      "type": "object",
+      "properties": {
+        "sellRate": {
+          "type": "number",
+          "description": "Курс продажи"
+        },
+        "sellIso": {
+          "type": "string",
+          "description": "Мнемоника продаваемой валюты"
+        },
+        "sellCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Код продаваемой валюты"
+        },
+        "buyRate": {
+          "type": "number",
+          "description": "Курс покупки"
+        },
+        "buyIso": {
+          "type": "string",
+          "description": "Мнемоника покупаемой валюты"
+        },
+        "buyCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Код покупаемой валюты"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Количество валюты (лот)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Наименование валюты"
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "example": "06.08.2019",
+          "description": "Дата начала действия курса"
+        }
+      },
+      "description": "Курс валюты банка"
+    },
+    "RateListResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "description": "Список основных курсов валют Альфа-Банка",
+          "items": {
+            "$ref": "#/definitions/Rate"
+          }
+        }
+      },
+      "description": "Выходная модель, содержащая основные курсы валют Альфа-Банка"
+    },
+    "ShortErrorModel": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "Категория ошибки",
+          "enum": [
+            "API_ERROR",
+            "BACK_ERROR"
+          ]
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Код ошибки"
+        },
+        "message": {
+          "type": "string",
+          "description": "Сообщение об ошибке"
+        }
+      }
+    }
+  },
+  "x-wso2-security": null,
+  "x-version-info": {
+    "description": [
+      {
+        "point": "Осуществлен перевод формата дат с UTC на локальный часовой пояс, соответственно поправка на +/- 3 часа будет упразднена"
+      },
+      {
+        "point": "Изменен формат дат с yyyy-MM-ddTHH:mm:ss.SSSZ на dd.mm.yyyy"
+      }
+    ],
+    "title": "Что нового в версии 1.0.1"
+  },
+  "host": "ibapi.alfabank.by:8273",
+  "basePath": "/partner/1.0.1/public",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "securityDefinitions": {
+    "default": {
+      "type": "oauth2",
+      "authorizationUrl": "https://ibapi.alfabank.by:8273/authorize",
+      "flow": "implicit",
+      "scopes": {}
+    }
+  }
+}

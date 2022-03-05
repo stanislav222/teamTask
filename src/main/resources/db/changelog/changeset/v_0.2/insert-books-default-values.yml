@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: Stas
+      comment: "Some default values"
+      changes:
+        - insert:
+            tableName: book
+            columns:
+              - column:
+                  name: isbn
+                  value: "978-1338596700"
+              - column:
+                  name: title
+                  value: "Harry Potter and the Sorcerer's Stone"
+              - column:
+                  name: author
+                  value: "J.K Rowling"
+              - column:
+                  name: sheets
+                  value: "368 pages"
+              - column:
+                  name: weight
+                  value: "2.35 pounds"
+              - column:
+                  name: cost
+                  value: 1426.9622
+        - insert:
+            tableName: book
+            columns:
+              - column:
+                  name: isbn
+                  value: "978-1338716535"
+              - column:
+                  name: title
+                  value: "Harry Potter and the Chamber of Secrets"
+              - column:
+                  name: author
+                  value: "J.K Rowling"
+              - column:
+                  name: sheets
+                  value: "400 pages"
+              - column:
+                  name: weight
+                  value: "2.51 pounds"
+              - column:
+                  name: cost
+                  value: 1460.0222
+

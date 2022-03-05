@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Stas
+      changes:
+        - createTable:
+            tableName: book
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement:  true
+                  constraints:
+                    primaryKey:  true
+                    nullable:  false
+              - column:
+                  name: isbn
+                  type: varchar(50)
+                  constraints:
+                    nullable:  false
+              - column:
+                  name: title
+                  type: varchar(50)
+                  constraints:
+                    nullable:  false
+              - column:
+                  name: author
+                  type: varchar(50)
+                  constraints:
+                    nullable:  false
+              - column:
+                  name: sheets
+                  type: varchar(50)
+                  constraints:
+                    nullable:  false
+              - column:
+                  name: weight
+                  type: varchar(50)
+                  constraints:
+                    nullable:  false
+              - column:
+                  name: cost
+                  type: decimal
+                  constraints:
+                    nullable:  false
+              - column:
+                  name: deleted
+                  type: integer
+                  constraints:
+                    nullable:  true
+
