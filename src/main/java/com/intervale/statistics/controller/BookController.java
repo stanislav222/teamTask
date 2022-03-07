@@ -4,6 +4,7 @@ import com.intervale.statistics.exception.BookException;
 import com.intervale.statistics.external.alfabank.model.Currency;
 import com.intervale.statistics.model.dto.SimpleBankCurrencyExchangeRateDto;
 import com.intervale.statistics.sevice.BookService;
+import com.intervale.statistics.sevice.CsvGenerationService;
 import com.intervale.statistics.sevice.SvgGenerationService;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class BookController {
 
     private final BookService bookService;
     private final SvgGenerationService svgGenerationService;
-
+    private final CsvGenerationService csvGenerationService;
 
     //Todo: добавить Request param с кол-во дней
     @GetMapping(value = "/price/stat/{title}/{nameCurrency}",
@@ -45,7 +46,14 @@ public class BookController {
             byte[] svg = svgGenerationService.createSvg(currenciesForPeriodOfTime);
             return new ResponseEntity<>(svg, HttpStatus.OK);
         }
+        else if (headers.containsValue("text/csv")) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + currenciesForPeriodOfTime.getTitle() + ".csv");
+            return new ResponseEntity<>(csvGenerationService.createCsv(currenciesForPeriodOfTime), responseHeaders, HttpStatus.OK);
+        }
         return new ResponseEntity<>(currenciesForPeriodOfTime, HttpStatus.OK);
     }
+
+
 }
 
