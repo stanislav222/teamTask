@@ -5,6 +5,8 @@ import com.intervale.statistics.exception.GenerateException;
 import com.intervale.statistics.external.alfabank.model.Currency;
 import com.intervale.statistics.model.dto.SimpleBankCurrencyExchangeRateDto;
 import com.intervale.statistics.sevice.BookService;
+import com.intervale.statistics.sevice.CsvGenerationService;
+import com.intervale.statistics.sevice.SvgGenerationService;
 import com.intervale.statistics.sevice.GeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,10 +39,9 @@ public class BookController {
 
         SimpleBankCurrencyExchangeRateDto currenciesForPeriodOfTime = bookService
                     .getPriceByTitleWithCostInDifferentCurrenciesForPeriodOfTime(title, nameCurrency);
+        byte[] responseBody = generatorService.createResponseBody(currenciesForPeriodOfTime, headers);
 
-        byte[] body = generatorService.createResponseBody(currenciesForPeriodOfTime, headers);
-
-        return new ResponseEntity<>(body, HttpStatus.OK);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 }
 

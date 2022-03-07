@@ -20,7 +20,9 @@ public class GeneratorService {
 
     @Qualifier(value = "pdfGenerator")
     private final GeneratorResponseBody pdfGenerator;
-    private final SvgGenerationService svgGenerationService;    // Todo  Немного переделать   private final GeneratorResponseBody svgGenerator;
+    private final SvgGenerationService svgGenerationService;
+    private final CsvGenerationService csvGenerationService;
+    // Todo  Немного переделать   private final GeneratorResponseBody svgGenerator;
     // Todo     private final GeneratorResponseBody csvGenerator;
     private final ObjectMapper objectMapper;
 
@@ -40,7 +42,7 @@ public class GeneratorService {
             return pdfGenerator.createResponseBody(rate);
         }
         if (headers.containsValue("text/csv")) {
-            return body;   // ToDo Заглушка, ждём реализацию csvGenerator.createResponseBody(rate);
+            return csvGenerationService.createCsv(rate);   // ToDo Заглушка, ждём реализацию csvGenerator.createResponseBody(rate);
         }
         if (headers.containsValue("application/json")) {
             String stringJson = "";
