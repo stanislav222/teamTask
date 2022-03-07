@@ -9,7 +9,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class RestResponseEntityExceptionHandler{
 
     @ExceptionHandler(BookException.class)
-    public ResponseEntity<BookResponse> handleExceptionBookCreat(BookException e) {
+    public ResponseEntity<BookResponse> handleExceptionBookCreate(BookException e) {
+        return ResponseEntity.badRequest().body(new BookResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler(GenerateException.class)
+    public ResponseEntity<BookResponse> handleExceptionGenerateFile(GenerateException e) {
         return ResponseEntity.badRequest().body(new BookResponse(e.getMessage()));
     }
 
