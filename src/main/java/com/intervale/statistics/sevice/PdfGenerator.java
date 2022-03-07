@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
-import java.util.Arrays;
 import java.util.Map;
 
 @Component(value = "pdfGenerator")
@@ -93,17 +92,26 @@ public class PdfGenerator implements GeneratorResponseBody {
         document.add(list);
 
         // Создаём таблицу
-        float[] columnWidths = {30F, 100F, 100F, 100F, 100F};
-        Table table = new Table(columnWidths).setBackgroundColor(ColorConstants.LIGHT_GRAY)
+        Map<String, Map<String, BigDecimal>> rateInfo = rate.getNationalBankExchangeRate();
+
+        //Узнаём количество валют сожержащихся в rate
+        int countCurrency = rateInfo.values().stream()
+                .map(e -> e.entrySet().size())
+                .findFirst()
+                .get();
+
+        int columnCount = countCurrency + 2;
+        Table table = new Table(columnCount).setBackgroundColor(ColorConstants.LIGHT_GRAY)
                 .setHorizontalAlignment(HorizontalAlignment.CENTER)
                 .setTextAlignment(TextAlignment.CENTER)
                 .setFontSize(11F);
 
-        java.util.List<String> tableHeaderList = Arrays.asList("N", "Date", "EUR", "USD", "RUB");
-        tableHeaderList.forEach(tableHeader -> table.addCell(new Cell().add(new Paragraph(tableHeader))
-                .setBackgroundColor(ColorConstants.GRAY)));
+        // Шапка таблицы
+        table.addCell("N");
+        table.addCell("Date");
+        rateInfo.values().stream().findFirst().get().forEach((currency, price) -> table.addCell(currency));
 
-        Map<String, Map<String, BigDecimal>> rateInfo = rate.getNationalBankExchangeRate();
+        // Содержание таблицы
         int numberRow = 1;
         for (Map.Entry<String, Map<String, BigDecimal>> entry : rateInfo.entrySet()) {
             table.addCell(String.valueOf(numberRow));
