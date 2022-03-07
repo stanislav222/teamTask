@@ -1,19 +1,16 @@
 package com.intervale.statistics.controller;
 
 import com.intervale.statistics.exception.BookException;
+import com.intervale.statistics.exception.GenerateException;
 import com.intervale.statistics.external.alfabank.model.Currency;
 import com.intervale.statistics.model.dto.SimpleBankCurrencyExchangeRateDto;
 import com.intervale.statistics.sevice.BookService;
-import com.intervale.statistics.sevice.SvgGenerationService;
-import lombok.Cleanup;
+import com.intervale.statistics.sevice.GeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +21,7 @@ import java.util.Map;
 public class BookController {
 
     private final BookService bookService;
-    private final SvgGenerationService svgGenerationService;
-
+    private final GeneratorService generatorService;
 
     //Todo: добавить Request param с кол-во дней
     @GetMapping(value = "/price/stat/{title}/{nameCurrency}",
@@ -36,16 +32,15 @@ public class BookController {
             })
     public ResponseEntity<?> getPriceByTitleWithCurrencyStatistics(@RequestHeader Map<String, String> headers,
                                                                    @PathVariable String title,
-                                                                   @PathVariable List<Currency> nameCurrency) throws BookException {
+                                                                   @PathVariable List<Currency> nameCurrency)
+                                                throws BookException, GenerateException {
 
         SimpleBankCurrencyExchangeRateDto currenciesForPeriodOfTime = bookService
                     .getPriceByTitleWithCostInDifferentCurrenciesForPeriodOfTime(title, nameCurrency);
 
-        if (headers.containsValue("image/svg+xml")) {
-            byte[] svg = svgGenerationService.createSvg(currenciesForPeriodOfTime);
-            return new ResponseEntity<>(svg, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(currenciesForPeriodOfTime, HttpStatus.OK);
+        byte[] body = generatorService.createResponseBody(currenciesForPeriodOfTime, headers);
+
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 }
 

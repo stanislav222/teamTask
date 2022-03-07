@@ -50,7 +50,12 @@ public class SvgGenerationService {
         SVGGraphics2D g2 = new SVGGraphics2D(900, 1000);
         Rectangle r = new Rectangle(0, 0, 900, 1000);
         chart.draw(g2, r);
-        File f = new File("./src/main/resources/WEB-INF/img/"+ UUID.randomUUID() +"-result.svg");
+        File fDir = new File("./src/main/resources/WEB-INF/img/");
+        if (!fDir.exists()){
+            fDir.mkdir();
+        }
+        File f = new File("./src/main/resources/WEB-INF/img/result.svg");
+
         byte[] data = new byte[0];
         try {
             SVGUtils.writeToSVG(f, g2.getSVGElement());
