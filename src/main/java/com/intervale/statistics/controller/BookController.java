@@ -6,15 +6,11 @@ import com.intervale.statistics.model.dto.SimpleBankCurrencyExchangeRateDto;
 import com.intervale.statistics.sevice.BookService;
 import com.intervale.statistics.sevice.CsvGenerationService;
 import com.intervale.statistics.sevice.SvgGenerationService;
-import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +33,8 @@ public class BookController {
             })
     public ResponseEntity<?> getPriceByTitleWithCurrencyStatistics(@RequestHeader Map<String, String> headers,
                                                                    @PathVariable String title,
-                                                                   @PathVariable List<Currency> nameCurrency) throws BookException {
+                                                                   @PathVariable List<Currency> nameCurrency)
+            throws BookException{
 
         SimpleBankCurrencyExchangeRateDto currenciesForPeriodOfTime = bookService
                     .getPriceByTitleWithCostInDifferentCurrenciesForPeriodOfTime(title, nameCurrency);
@@ -47,13 +44,10 @@ public class BookController {
             return new ResponseEntity<>(svg, HttpStatus.OK);
         }
         else if (headers.containsValue("text/csv")) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + currenciesForPeriodOfTime.getTitle() + ".csv");
-            return new ResponseEntity<>(csvGenerationService.createCsv(currenciesForPeriodOfTime), responseHeaders, HttpStatus.OK);
+            byte[] csv = svgGenerationService.createSvg(currenciesForPeriodOfTime);
+            return new ResponseEntity<>(csv, HttpStatus.OK);
         }
         return new ResponseEntity<>(currenciesForPeriodOfTime, HttpStatus.OK);
     }
-
-
 }
 
