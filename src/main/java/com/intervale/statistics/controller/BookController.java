@@ -44,7 +44,7 @@ public class BookController {
             return new ResponseEntity<>(svg, HttpStatus.OK);
         }
         else if (headers.containsValue("text/csv")) {
-            byte[] csv = svgGenerationService.createSvg(currenciesForPeriodOfTime);
+            byte[] csv = csvGenerationService.createCsv(currenciesForPeriodOfTime);
             return new ResponseEntity<>(csv, HttpStatus.OK);
         }
         return new ResponseEntity<>(currenciesForPeriodOfTime, HttpStatus.OK);
