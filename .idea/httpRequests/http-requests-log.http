@@ -1,4 +1,147 @@
 GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/json
+
+<> 2022-03-12T084248.200.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+
+<> 2022-03-12T064102.200.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/json
+
+<> 2022-03-12T064059.200.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+
+<> 2022-03-12T063642.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/json
+
+<> 2022-03-12T063516.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: image/svg+xml
+
+<> 2022-03-12T063504.200.svg
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+
+<> 2022-03-12T063438.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+Accept: application/json
+
+<> 2022-03-12T063112.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: image/svg+xml
+
+<> 2022-03-12T061703.200.svg
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/pdf
+
+<> 2022-03-12T061428.200.txt
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/json
+
+<> 2022-03-12T061415.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/json
+
+<> 2022-03-12T061323.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/json
+
+<> 2022-03-12T061259.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+
+<> 2022-03-12T061140.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+Accept: text/csv
+
+<> 2022-03-12T061136.200.txt
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+Accept: text/csv
+
+<> 2022-03-12T061101.200.txt
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+Accept: image/svg+xml
+
+<> 2022-03-12T041203.200.svg
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+
+<> 2022-03-12T041118.200.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+Accept: image/svg+xml
+Accept: text/csv
+
+<> 2022-03-12T041057.200.svg
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+Accept: image/svg+xml
+
+<> 2022-03-12T041043.200.svg
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: text/csv
+
+<> 2022-03-12T041039.200.txt
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
 Accept: text/csv
 
 <> 2022-03-12T035118.200.txt

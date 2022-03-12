@@ -3,18 +3,17 @@ package com.intervale.statistics.controller;
 import com.intervale.statistics.exception.BookException;
 import com.intervale.statistics.exception.GenerateException;
 import com.intervale.statistics.external.alfabank.model.Currency;
-import com.intervale.statistics.model.dto.SimpleBankCurrencyExchangeRateDto;
+import com.intervale.statistics.model.domain.SimpleBankCurrencyExchangeRate;
 import com.intervale.statistics.sevice.BookService;
-import com.intervale.statistics.sevice.CsvGenerationService;
-import com.intervale.statistics.sevice.SvgGenerationService;
-import com.intervale.statistics.sevice.GeneratorService;
+import com.intervale.statistics.sevice.FormatFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/book")
@@ -23,25 +22,23 @@ import java.util.Map;
 public class BookController {
 
     private final BookService bookService;
-    private final GeneratorService generatorService;
+    private final FormatFactory formatFactory;
 
-    //Todo: добавить Request param с кол-во дней
     @GetMapping(value = "/price/stat/{title}/{nameCurrency}",
             produces = {MediaType.APPLICATION_JSON_VALUE,
                         MediaType.APPLICATION_PDF_VALUE,
                         "text/csv",
                         "image/svg+xml"
             })
-    public ResponseEntity<?> getPriceByTitleWithCurrencyStatistics(@RequestHeader Map<String, String> headers,
-                                                                   @PathVariable String title,
-                                                                   @PathVariable List<Currency> nameCurrency)
+    public ResponseEntity<?> getPriceByTitleWithCurrencyStatistics(
+            @RequestHeader(value = "Accept", defaultValue = MediaType.APPLICATION_JSON_VALUE) String header,
+            @PathVariable String title,
+            @PathVariable List<Currency> nameCurrency)
                                                 throws BookException, GenerateException {
-
-        SimpleBankCurrencyExchangeRateDto currenciesForPeriodOfTime = bookService
-                    .getPriceByTitleWithCostInDifferentCurrenciesForPeriodOfTime(title, nameCurrency);
-        byte[] responseBody = generatorService.createResponseBody(currenciesForPeriodOfTime, headers);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        SimpleBankCurrencyExchangeRate currencies = bookService
+                    .getPriceByTitleWithCostInDifferentCurrenciesNB(title, nameCurrency);
+        byte[] bytesArray = formatFactory.getFormat(header).getBytesArray(currencies);
+        return new ResponseEntity<>(bytesArray, HttpStatus.OK);
     }
 }
 

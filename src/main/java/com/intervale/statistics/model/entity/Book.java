@@ -1,4 +1,4 @@
-package com.intervale.statistics.model;
+package com.intervale.statistics.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -82,7 +82,6 @@ Spring Boot tomcat-jdbc по умолчанию использует пул Tomc
 			<version>42.3.3</version>
 		</dependency>
 
-<<<<<<<<< Temporary merge branch 1
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-csv</artifactId>

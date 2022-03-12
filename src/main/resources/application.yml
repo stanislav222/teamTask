@@ -11,7 +11,13 @@ spring:
 alfa-bank:
   setting:
     base-url: https://developerhub.alfabank.by:8273
+    number-of-recent-days: 10
 
-
+## Каждые 10 секунд для теста "*/10 * * * * *"  c 8 - 18 каждый день 8, 9 и т.д "0 0 8-18 * * *"
+statistics:
+  notifications:
+    daemon:
+      expiration-report-cron: "*/10 * * * * *"
+      timeZone: Europe/Moscow
 
 

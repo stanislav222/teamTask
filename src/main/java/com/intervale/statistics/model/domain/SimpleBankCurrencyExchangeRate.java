@@ -1,4 +1,4 @@
-package com.intervale.statistics.model.dto;
+package com.intervale.statistics.model.domain;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
-public class SimpleBankCurrencyExchangeRateDto<T> {
+public class SimpleBankCurrencyExchangeRate<T> {
     @NonNull
     private String title;
     @NonNull

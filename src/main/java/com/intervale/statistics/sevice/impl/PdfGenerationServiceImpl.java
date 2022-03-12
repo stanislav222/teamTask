@@ -1,7 +1,8 @@
-package com.intervale.statistics.sevice;
+package com.intervale.statistics.sevice.impl;
 
 import com.intervale.statistics.exception.GenerateException;
-import com.intervale.statistics.model.dto.SimpleBankCurrencyExchangeRateDto;
+import com.intervale.statistics.model.domain.SimpleBankCurrencyExchangeRate;
+import com.intervale.statistics.sevice.ResponseGenerator;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.geom.PageSize;
@@ -21,15 +22,21 @@ import java.net.MalformedURLException;
 import java.util.Map;
 
 @Component(value = "pdfGenerator")
-public class PdfGenerator implements GeneratorResponseBody {
+public class PdfGenerationServiceImpl implements ResponseGenerator {
 
     private final String PDF_DIRECTORY_PATH = "./src/main/resources/WEB-INF/pdf";
     private final String PDF_FILE_PATH = "./src/main/resources/WEB-INF/pdf/report.pdf";
     private final String BACKGROUND_IMAGE_PATH = "./src/main/resources/background.jpg";
     private final String SVG_FILE_PATH = "./src/main/resources/WEB-INF/img/result.svg";
+    private static final String FORMAT_TYPE = "application/pdf";
 
     @Override
-    public byte[] createResponseBody(SimpleBankCurrencyExchangeRateDto<Map<String, Map<String, BigDecimal>>> rate)
+    public String getResponseFormat() {
+        return FORMAT_TYPE;
+    }
+
+    @Override
+    public byte[] getBytesArray(SimpleBankCurrencyExchangeRate<Map<String, Map<String, BigDecimal>>> rate)
             throws GenerateException {
 
         File pdfDirectory = new File(PDF_DIRECTORY_PATH);
@@ -54,7 +61,7 @@ public class PdfGenerator implements GeneratorResponseBody {
         return data;
     }
 
-    public void createPdfFile(SimpleBankCurrencyExchangeRateDto<Map<String, Map<String, BigDecimal>>> rate)
+    public void createPdfFile(SimpleBankCurrencyExchangeRate<Map<String, Map<String, BigDecimal>>> rate)
             throws GenerateException {
 
         PdfWriter pdfWriter = null;
