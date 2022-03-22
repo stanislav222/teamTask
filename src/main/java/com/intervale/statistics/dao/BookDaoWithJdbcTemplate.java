@@ -2,6 +2,7 @@ package com.intervale.statistics.dao;
 
 import com.intervale.statistics.dto.RateDto;
 import com.intervale.statistics.model.entity.Book;
+import com.intervale.statistics.model.entity.RateEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -32,12 +33,33 @@ public class BookDaoWithJdbcTemplate implements BookDao{
     }
 
     @Override
-    public boolean addRate(RateDto rateDto) {
-        return false;
+    public boolean addRate(RateEntity rateEntity) {
+
+        try {
+            jdbcTemplate.update(ADD_RATE, rateEntity.getSellRate(), rateEntity.getSellIso(), rateEntity.getSellCode(),
+                    rateEntity.getBuyRate(), rateEntity.getBuyIso(), rateEntity.getBuyCode(), rateEntity.getQuantity(),
+                    rateEntity.getName(), rateEntity.getDate());
+
+            log.info("Rate successfully saved into data base. Rate: {}", rateEntity);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            log.error("Rate do not saved into data base. Rate: {}", rateEntity);
+            return false;
+        }
     }
 
     @Override
-    public List<RateDto> getListRate(String dataRange) {
-        return null;
+    public List<RateEntity> getListRate(String dataRange) {
+
+        try {
+            List<RateEntity> rateEntityList = jdbcTemplate
+                    .query(GET_ALL_RATES, new BeanPropertyRowMapper<>(RateEntity.class));
+
+            log.info("Rates from data base successfully received");
+            return rateEntityList;
+        } catch (EmptyResultDataAccessException e) {
+            log.error("Rates from data base do not received");
+            return null;
+        }
     }
 }

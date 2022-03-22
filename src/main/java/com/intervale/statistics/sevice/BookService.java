@@ -7,6 +7,7 @@ import com.intervale.statistics.external.alfabank.model.Currency;
 import com.intervale.statistics.external.alfabank.service.AlfaBankExchangeWithWebClient;
 import com.intervale.statistics.model.domain.SimpleBankCurrencyExchangeRate;
 import com.intervale.statistics.model.entity.Book;
+import com.intervale.statistics.model.entity.RateEntity;
 import com.intervale.statistics.util.Calculations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,8 +62,10 @@ public class BookService {
     public SimpleBankCurrencyExchangeRate getPriceByTitleWithCostInDifferentCurrenciesAB
             (String title, List<Currency> currencies) throws BookException {
         BigDecimal priceByTitle = getPriceByTitle(title);
-        Map<LocalDate, Map<String, BigDecimal>> sorted = bookDaoWithJdbcTemplate.getListRate("").stream()
-                .collect(Collectors.groupingBy(RateDto::getDate))
+        String currenciesName = currencies.stream().map(Enum::name).collect(Collectors.joining((",")));
+        Map<String, Map<String, BigDecimal>> sorted = bookDaoWithJdbcTemplate.getListRate("").stream()
+                .filter(rate -> currenciesName.contains(rate.getSellIso()))
+                .collect(Collectors.groupingBy(RateEntity::getDate))
                 .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> calculations.getStringBigDecimalMapForR(priceByTitle, e.getValue())))
