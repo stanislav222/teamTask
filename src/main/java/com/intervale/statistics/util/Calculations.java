@@ -2,6 +2,7 @@ package com.intervale.statistics.util;
 
 import com.intervale.statistics.dto.NationalRateDto;
 import com.intervale.statistics.dto.RateDto;
+import com.intervale.statistics.model.entity.RateEntity;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -20,10 +21,11 @@ public class Calculations {
                                 .divide(BigDecimal.valueOf(i.getQuantity()), 4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP)));
     }
 
-    public Map<String, BigDecimal> getStringBigDecimalMapForR(BigDecimal priceByTitle, List<RateDto> saleRate) {
+    public Map<String, BigDecimal> getStringBigDecimalMapForR(BigDecimal priceByTitle, List<RateEntity> saleRate) {
+
         return saleRate.stream()
-                .collect(Collectors.toMap(RateDto::getBuyIso, i -> priceByTitle
-                        .divide(i.getBuyRate()
-                                .divide(BigDecimal.valueOf(i.getQuantity()), 4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP)));
+                .collect(Collectors.toMap(RateEntity::getSellIso, price -> priceByTitle
+                        .divide(price.getBuyRate()
+                                .divide(BigDecimal.valueOf(price.getQuantity()), 4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP)));
     }
 }

@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: Sergey
+      changes:
+        - createTable:
+            tableName: rate
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: sell_rate
+                  type: decimal
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sell_iso
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sell_code
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: buy_rate
+                  type: decimal
+                  constraints:
+                    nullable: false
+              - column:
+                  name: buy_iso
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: buy_code
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+

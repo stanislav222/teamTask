@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class AlfaBankExchangeWithWebClient {
 
     private static final String NATIONAL_BANK_ROUT = "/partner/1.0.1/public/nationalRates?currencyCode=";
-    private static final String ALFA_BANK_ROUT = "";
+    private static final String ALFA_BANK_ROUT = "/partner/1.0.1/public/rates";
 
     @Qualifier("webClientAlfaBank")
     private final WebClient webClient;
@@ -33,11 +33,11 @@ public class AlfaBankExchangeWithWebClient {
     @Value("${alfa-bank.setting.number-of-recent-days}")
     private int numberOfDays;
 
-    public List<RateDto> getTheCurrentCurrencySaleRateAB(List<Currency> currencyList) {
-        String url = ALFA_BANK_ROUT;
+    public List<RateDto> getTheCurrentCurrencySaleRateAB(){    //(List<Currency> currencyList) {
+        //String url = ALFA_BANK_ROUT;
         RateListResponseDto rateList = webClient
                 .get()
-                .uri(url)
+                .uri(ALFA_BANK_ROUT)
                 .retrieve()
                 .bodyToMono(RateListResponseDto.class)
                 .blockOptional()
