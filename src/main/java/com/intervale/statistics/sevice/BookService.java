@@ -55,6 +55,12 @@ public class BookService {
     }
 
 
+    /**
+     * getStringBigDecimalMap
+     * @param priceByTitle
+     * @param saleRate
+     * @return
+     */
     private Map<String, BigDecimal> getStringBigDecimalMap(BigDecimal priceByTitle, List<NationalRateDto> saleRate) {
         return saleRate.stream()
                     .collect(Collectors.toMap(NationalRateDto::getIso, i -> priceByTitle

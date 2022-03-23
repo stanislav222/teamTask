@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler{
 
+    /**
+     * обработчик ошибок
+     * @param e
+     * @return
+     */
     @ExceptionHandler(BookException.class)
     public ResponseEntity<BookResponse> handleExceptionBookCreat(BookException e) {
         return ResponseEntity.badRequest().body(new BookResponse(e.getMessage()));

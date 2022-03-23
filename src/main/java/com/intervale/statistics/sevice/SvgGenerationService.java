@@ -21,6 +21,11 @@ import java.util.Map;
 @Service
 public class SvgGenerationService {
 
+    /**
+     * создать диаграмму
+     * @param rate
+     * @return
+     */
     private JFreeChart createChart(SimpleBankCurrencyExchangeRateDto<Map<String, Map<String, BigDecimal>>> rate) {
         DefaultStatisticalCategoryDataset dataset = new DefaultStatisticalCategoryDataset();
         rate.getNationalBankExchangeRate().forEach((date, stringBigDecimalMap) -> {
@@ -42,6 +47,10 @@ public class SvgGenerationService {
     }
 
 
+    /**
+     * создать векторную графику SVG
+     * @param simpleBankCurrencyExchangeRateDto
+     */
     public void createSvg(SimpleBankCurrencyExchangeRateDto<Map<String, Map<String, BigDecimal>>> simpleBankCurrencyExchangeRateDto) {
         JFreeChart chart = createChart(simpleBankCurrencyExchangeRateDto);
         SVGGraphics2D g2 = new SVGGraphics2D(1000, 900);

@@ -12,6 +12,10 @@ import reactor.core.publisher.Mono;
 @Component
 public class WebClientFilter {
 
+    /**
+     * Запрос журнала
+     * @return
+     */
     public ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
             log.info("=>".repeat(12) + " Request to external resource start");
@@ -24,6 +28,10 @@ public class WebClientFilter {
         });
     }
 
+    /**
+     * журнал ответов
+     * @return
+     */
     public ExchangeFilterFunction logResponse() {
         return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
             log.info("=>".repeat(12)  + " Response from external resource start");
@@ -36,6 +44,11 @@ public class WebClientFilter {
         });
     }
 
+    /**
+     * log Body
+     * @param response
+     * @return
+     */
      private static Mono<ClientResponse> logBody(ClientResponse response) {
         if (response.statusCode() != null && (!response.statusCode().is4xxClientError() || !response.statusCode().is5xxServerError())) {
             return response.bodyToMono(String.class)
@@ -48,6 +61,10 @@ public class WebClientFilter {
         }
     }
 
+    /**
+     * Фильтр ответа на ошибку
+     * @return
+     */
     public ExchangeFilterFunction errorResponseFilter() {
         return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
             if (clientResponse.statusCode().series() == HttpStatus.Series.SERVER_ERROR) {

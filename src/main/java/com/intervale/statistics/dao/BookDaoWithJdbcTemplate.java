@@ -15,6 +15,11 @@ public class BookDaoWithJdbcTemplate implements BookDao{
 
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * Service для запроса к базе данных
+     * @param title
+     * @return
+     */
     @Override
     public Book getPriceByTitle(String title) {
         try {

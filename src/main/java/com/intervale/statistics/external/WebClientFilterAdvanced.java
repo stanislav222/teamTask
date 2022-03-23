@@ -29,6 +29,12 @@ public class WebClientFilterAdvanced implements ExchangeFilterFunction {
 
     private static final int MAX_BYTES_LOGGED = 4_096;
 
+    /**
+     * it is a constructor ClientResponse
+     * @param request ClientRequest  the client request
+     * @param next ExchangeFunction  the exchange function
+     * @return
+     */
     @Override
     @NonNull
     public Mono<ClientResponse> filter(@NonNull ClientRequest request, @NonNull ExchangeFunction next) {
@@ -48,11 +54,22 @@ public class WebClientFilterAdvanced implements ExchangeFilterFunction {
         return next
                 .exchange(ClientRequest.from(request).body(new BodyInserter<>() {
 
+                    /**
+                     * вставлять
+                     * @param req
+                     * @param context
+                     * @return
+                     */
                     @Override
                     @NonNull
                     public Mono<Void> insert(@NonNull ClientHttpRequest req, @NonNull Context context) {
                         return request.body().insert(new ClientHttpRequestDecorator(req) {
 
+                            /**
+                             * написать
+                             * @param body
+                             * @return
+                             */
                             @Override
                             @NonNull
                             public Mono<Void> writeWith(@NonNull Publisher<? extends DataBuffer> body) {
@@ -96,6 +113,11 @@ public class WebClientFilterAdvanced implements ExchangeFilterFunction {
                 );
     }
 
+    /**
+     * извлечь байты
+     * @param data
+     * @return
+     */
     private static String extractBytes(DataBuffer data) {
         int currentReadPosition = data.readPosition();
         var numberOfBytesLogged = min(data.readableByteCount(), MAX_BYTES_LOGGED);

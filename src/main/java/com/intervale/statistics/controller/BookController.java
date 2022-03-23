@@ -26,6 +26,14 @@ public class BookController {
 
 
     //Todo: добавить Request param с кол-во дней
+
+    /**
+     * Цена по названию со статистикой валют
+     * @param title
+     * @param nameCurrency
+     * @return
+     * @throws BookException
+     */
     @GetMapping(value = "/price/stat/{title}/{nameCurrency}",
             produces = {MediaType.APPLICATION_XML_VALUE,
                         MediaType.APPLICATION_JSON_VALUE})

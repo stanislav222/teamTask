@@ -20,6 +20,15 @@ public class Book {
     private BigDecimal cost;
     private int isDeleted;
 
+    /**
+     *
+     * @param isbn
+     * @param title
+     * @param author
+     * @param sheets
+     * @param weight
+     * @param cost
+     */
     public Book(String isbn, String title, String author, String sheets, String weight, BigDecimal cost) {
         this.isbn = isbn;
         this.title = title;
@@ -29,6 +38,16 @@ public class Book {
         this.cost = cost;
     }
 
+    /**
+     *
+     * @param id
+     * @param isbn
+     * @param title
+     * @param author
+     * @param sheets
+     * @param weight
+     * @param cost
+     */
     public Book(Integer id, String isbn, String title, String author, String sheets, String weight, BigDecimal cost) {
         this.id = id;
         this.isbn = isbn;

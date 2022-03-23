@@ -24,6 +24,11 @@ public class AlfaBankExchangeWithWebClient {
     @Qualifier("webClientAlfaBank")
     private final WebClient webClient;
 
+    /**
+     * Текущая валюта
+     * @param currencyList
+     * @return
+     */
     public List<NationalRateDto> getTheCurrentCurrencySaleRate(List<Currency> currencyList) {
         List<Integer> collect = currencyList.stream().map(Currency::getCurrencyCode).collect(Collectors.toList());
         String codeCurrencies = collect.stream().map(String::valueOf).collect(Collectors.joining((",")));
@@ -38,6 +43,11 @@ public class AlfaBankExchangeWithWebClient {
         return responseDto.getRates();
     }
 
+    /**
+     * Текущий курс продажи валюты с датой диапазона
+     * @param currencyList
+     * @return
+     */
     public Map<String, List<NationalRateDto>> getTheCurrentCurrencySaleRateWithRangeDate(List<Currency> currencyList) {
         List<String> dateRange = getDatesBetween();
         Flux<NationalRateListResponseDto> nationalRateListResponseDtoFlux = Flux.fromIterable(dateRange)
@@ -49,6 +59,12 @@ public class AlfaBankExchangeWithWebClient {
                 .collect(Collectors.groupingBy(NationalRateDto::getDate));
     }
 
+    /**
+     * Текущий курс продажи валюты с датой
+     * @param currencyList
+     * @param date
+     * @return
+     */
     public Mono<NationalRateListResponseDto> getTheCurrentCurrencySaleRateWithDate(List<Currency> currencyList, String date) {
         List<Integer> collect = currencyList.stream().map(Currency::getCurrencyCode).collect(Collectors.toList());
         String codeCurrencies = collect.stream().map(String::valueOf).collect(Collectors.joining((",")));
@@ -61,6 +77,10 @@ public class AlfaBankExchangeWithWebClient {
 
     }
 
+    /**
+     * Даты Между
+     * @return
+     */
     private List<String> getDatesBetween() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate startDate = LocalDate.now();

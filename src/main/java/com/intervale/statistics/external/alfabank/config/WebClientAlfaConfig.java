@@ -27,6 +27,10 @@ public class WebClientAlfaConfig {
     private final WebClientFilter webClientFilter;
     private final WebClientFilterAdvanced webClientFilterAdvanced;
 
+    /**
+     * Конфигурация WebClient
+     * @return
+     */
     @Bean
     public WebClient webClientAlfaBank() {
         HttpClient httpClient = HttpClient.create()

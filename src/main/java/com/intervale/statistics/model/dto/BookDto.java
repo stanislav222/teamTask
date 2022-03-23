@@ -31,6 +31,15 @@ public class BookDto {
     @Positive
     private BigDecimal cost;
 
+    /**
+     *
+     * @param isbn
+     * @param title
+     * @param author
+     * @param sheets
+     * @param weight
+     * @param cost
+     */
     public BookDto(String isbn, String title, String author, String sheets, String weight, BigDecimal cost) {
         this.isbn = isbn;
         this.title = title;
