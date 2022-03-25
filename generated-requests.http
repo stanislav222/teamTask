@@ -1,6 +1,7 @@
 ### Цена книги по названию из БД, конвертация из BLR -> RUB, USD, EUR, за несколько дат
 GET http://localhost:8080/api/v1/book/price/stat/Harry Potter/RUB,USD,EUR
+Accept: image/svg+xml
 
 ###
-GET http://localhost:8080/api/v1/book/price/stat/Harry Potter/RUB,USD
-Accept: application/json
+GET http://localhost:8080/api/v1/book/price/stat/Harry Potter/RUB
+Accept: image/svg+xml

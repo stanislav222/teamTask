@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+        id:  addForeignKeyConstraint
+        author:  Stas
+        changes:
+          - addForeignKeyConstraint:
+              baseColumnNames:  price_id
+              baseTableName:  book
+              baseTableSchemaName:  public
+              constraintName:  fk_address_prices
+              #deferrable:  true
+              #initiallyDeferred:  true
+              #onDelete:  CASCADE
+              #onUpdate:  RESTRICT
+              referencedColumnNames:  id
+              referencedTableName:  prices
+              referencedTableSchemaName:  public
+              validate:  true
