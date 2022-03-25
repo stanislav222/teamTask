@@ -19,8 +19,7 @@ public class RateMapper {
                 .buyCode(rateDto.getBuyCode())
                 .quantity(rateDto.getQuantity())
                 .name(rateDto.getName())
-                .date(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
-                //.date(LocalDate.now())
+                .date(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
                 .build();
     }
 }

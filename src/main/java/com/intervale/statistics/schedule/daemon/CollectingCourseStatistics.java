@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,18 +20,15 @@ public class CollectingCourseStatistics {
     private final BookDao bookDao;
     private final AlfaBankExchangeWithWebClient webClient;
 
-    @Scheduled(cron = "${statistics.notifications.daemon.expiration-report-cron}",
-            zone = "${statistics.notifications.daemon.timeZone}")
+   // @Scheduled(cron = "${statistics.notifications.daemon.expiration-report-cron}",
+    //        zone = "${statistics.notifications.daemon.timeZone}")
     public void report() {
-
         List<RateDto> rateDtos = webClient.getTheCurrentCurrencySaleRateAB();          //(List.of(Currency.EUR, Currency.USD, Currency.RUB));
         List<RateEntity> rateEntities = rateDtos.stream()
                 .filter(rate -> rate.getName() != null)
                 .map(RateMapper::rateDtoIntoRateEntity)
                 .collect(Collectors.toList());
-
         //rateEntities.forEach(bookDao::addRate);
         log.info("Added into DB");
-
     }
 }

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 2
+      id: 4
       author: Stas
       comment: "Some default values"
       changes:
@@ -23,8 +23,8 @@ databaseChangeLog:
                   name: weight
                   value: "2.35 pounds"
               - column:
-                  name: cost
-                  value: 1426.9622
+                  name: price_id
+                  value: 3
         - insert:
             tableName: book
             columns:
@@ -44,6 +44,6 @@ databaseChangeLog:
                   name: weight
                   value: "2.51 pounds"
               - column:
-                  name: cost
-                  value: 1460.0222
+                  name: price_id
+                  value: 4
 
