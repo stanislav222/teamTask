@@ -1,6 +1,5 @@
 package com.intervale.statistics.dao;
 
-import com.intervale.statistics.dto.RateDto;
 import com.intervale.statistics.model.entity.Book;
 import com.intervale.statistics.model.entity.RateEntity;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +10,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class BookDaoWithJdbcTemplate implements BookDao{
+public class BookDaoWithJdbcTemplate implements BookDao {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -49,17 +49,20 @@ public class BookDaoWithJdbcTemplate implements BookDao{
     }
 
     @Override
-    public List<RateEntity> getListRate(String dataRange) {
+    public Optional<List<RateEntity>> getListRate(Integer dayCount) {
+
+        List<RateEntity> resultQuery = null;
+        int rateCount = dayCount * 3;
 
         try {
-            List<RateEntity> rateEntityList = jdbcTemplate
-                    .query(GET_ALL_RATES, new BeanPropertyRowMapper<>(RateEntity.class));
+            resultQuery = jdbcTemplate
+                    .query(GET_RATES_BY_COUNT_DAY, new BeanPropertyRowMapper<>(RateEntity.class), rateCount);
 
             log.info("Rates from data base successfully received");
-            return rateEntityList;
+
         } catch (EmptyResultDataAccessException e) {
             log.error("Rates from data base do not received");
-            return null;
         }
+        return Optional.ofNullable(resultQuery);
     }
 }
