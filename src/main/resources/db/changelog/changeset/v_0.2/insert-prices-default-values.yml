@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: Stas
+      comment: "Some default values"
+      changes:
+        - sql:
+            sql: insert into prices (book_id, price, date) values (1, '250.2000', '23.03.2022')
+        - sql:
+            sql: insert into prices (book_id, price, date) values (1, '300.2000', '24.03.2022')
+        - sql:
+            sql: insert into prices (book_id, price, date) values (1, '350.2000', '25.03.2022')
+        - sql:
+            sql: insert into prices (book_id, price, date) values (2, '400.2000', '23.03.2022')

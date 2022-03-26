@@ -28,7 +28,7 @@ public class PdfGenerationServiceImpl implements ResponseGenerator {
     private final String PDF_FILE_PATH = "./src/main/resources/WEB-INF/pdf/report.pdf";
     private final String BACKGROUND_IMAGE_PATH = "./src/main/resources/background.jpg";
     private final String SVG_FILE_PATH = "./src/main/resources/WEB-INF/img/result.svg";
-    private static final String FORMAT_TYPE = "application/pdf";
+    private static final String FORMAT_TYPE = "image/svg+xml;application/pdf";
 
     @Override
     public String getResponseFormat() {

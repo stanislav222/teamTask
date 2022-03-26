@@ -45,15 +45,13 @@ public class BookController {
         SimpleBankCurrencyExchangeRate currencies = bookService
                     .getPriceByTitleWithCostInDifferentCurrenciesNB(title, nameCurrency);
 */
-        SimpleBankCurrencyExchangeRate currencies = bookService
-                .getPriceByTitleWithCostInDifferentCurrenciesAB(title, nameCurrency, dayCount);
 
-        if (currencies == null){
-            return new ResponseEntity<>("Не корректный запрос", HttpStatus.BAD_REQUEST);
-        }
+       // SimpleBankCurrencyExchangeRate currencies = bookService
+        //        .getPriceByTitleWithCostInDifferentCurrenciesAB(title, nameCurrency);
 
         byte[] bytesArray = formatFactory.getFormat(header).getBytesArray(currencies);
         return new ResponseEntity<>(bytesArray, HttpStatus.OK);
     }
+
 }
 

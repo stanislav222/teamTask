@@ -1,3 +1,103 @@
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
+Accept: image/svg+xml
+
+<> 2022-03-25T041831.200.svg
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB
+Accept: image/svg+xml
+
+<> 2022-03-25T041752.200.svg
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB
+Accept: image/svg+xml
+
+<> 2022-03-25T041030.200.svg
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB
+Accept: application/json
+
+<> 2022-03-25T040905.200.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB
+Accept: application/json
+
+<> 2022-03-25T035336.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB
+Accept: application/json
+
+<> 2022-03-25T025551.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB
+Accept: application/json
+
+<> 2022-03-25T025302.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/json
+
+<> 2022-03-25T024750.500.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: image/svg+xml
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: image/svg+xml
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/pdf
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/pdf
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: image/svg+xml
+
+<> 2022-03-25T125532.200.svg
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/json
+
+<> 2022-03-25T125410.200.json
+
+###
+
+GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
+Accept: application/pdf
+
+###
+
 GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD
 Accept: application/json
 
@@ -225,13 +325,6 @@ GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
 Accept: application/json
 
 <> 2022-03-05T063944.200.json
-
-###
-
-GET http://localhost:8080/api/v1/book/price/stat/Harry%20Potter/RUB,USD,EUR
-Accept: application/json
-
-<> 2022-03-05T063626.200.json
 
 ###
 
