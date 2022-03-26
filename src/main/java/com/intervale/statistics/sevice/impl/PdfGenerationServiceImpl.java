@@ -10,10 +10,15 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.List;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.svg.converter.SvgConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -28,7 +33,11 @@ public class PdfGenerationServiceImpl implements ResponseGenerator {
     private final String PDF_FILE_PATH = "./src/main/resources/WEB-INF/pdf/report.pdf";
     private final String BACKGROUND_IMAGE_PATH = "./src/main/resources/background.jpg";
     private final String SVG_FILE_PATH = "./src/main/resources/WEB-INF/img/result.svg";
-    private static final String FORMAT_TYPE = "image/svg+xml;application/pdf";
+    private static final String FORMAT_TYPE = "application/pdf";
+
+    @Qualifier("svgGenerationServiceImpl")
+    @Autowired(required = false)
+    private ResponseGenerator responseGenerator;
 
     @Override
     public String getResponseFormat() {
@@ -130,6 +139,9 @@ public class PdfGenerationServiceImpl implements ResponseGenerator {
         }
         document.add(table);
 
+        if(responseGenerator != null) {
+            responseGenerator.getBytesArray(rate);
+        }
         //Если файл Result.svg существует, добавляем svg файл в конец pdf
         File svgFile = new File(SVG_FILE_PATH);
         if (svgFile.exists()) {

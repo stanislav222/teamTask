@@ -7,7 +7,6 @@ import com.intervale.statistics.dto.RateListResponseDto;
 import com.intervale.statistics.external.alfabank.model.Currency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -30,11 +29,7 @@ public class AlfaBankExchangeWithWebClient {
     @Qualifier("webClientAlfaBank")
     private final WebClient webClient;
 
-    @Value("${alfa-bank.setting.number-of-recent-days}")
-    private int numberOfDays;
-
-    public List<RateDto> getTheCurrentCurrencySaleRateAB(){    //(List<Currency> currencyList) {
-        //String url = ALFA_BANK_ROUT;
+    public List<RateDto> getTheCurrentCurrencySaleRateAB(){
         RateListResponseDto rateList = webClient
                 .get()
                 .uri(ALFA_BANK_ROUT)
@@ -45,11 +40,13 @@ public class AlfaBankExchangeWithWebClient {
         return rateList.getRates();
     }
 
-    public Map<String, List<NationalRateDto>> getTheCurrentCurrencySaleRateWithRangeDate(List<Currency> currencyList) {
-        List<String> dateRange = getDatesBetween();
+    public Map<String, List<NationalRateDto>> getTheCurrentCurrencySaleRateWithRangeDate(List<Currency> currencyList, int dateCount) {
+        List<String> dateRange = getDatesBetween(dateCount);
         Flux<NationalRateListResponseDto> nationalRateListResponseDtoFlux = Flux.fromIterable(dateRange)
-                .flatMap(date -> getTheCurrentCurrencySaleRateWithDate(currencyList, date));
-        Set<NationalRateListResponseDto> block = nationalRateListResponseDtoFlux.collect(Collectors.toSet()).block();
+                .flatMap(date ->
+                        getTheCurrentCurrencySaleRateWithDate(currencyList, date));
+        Set<NationalRateListResponseDto> block = nationalRateListResponseDtoFlux
+                .collect(Collectors.toSet()).block();
         assert block != null;
         return block.stream()
                 .flatMap(rate -> rate.getRates().stream())
@@ -57,8 +54,10 @@ public class AlfaBankExchangeWithWebClient {
     }
 
     public Mono<NationalRateListResponseDto> getTheCurrentCurrencySaleRateWithDate(List<Currency> currencyList, String date) {
-        List<Integer> collect = currencyList.stream().map(Currency::getCurrencyCode).collect(Collectors.toList());
-        String codeCurrencies = collect.stream().map(String::valueOf).collect(Collectors.joining((",")));
+        String codeCurrencies = currencyList.stream()
+                .map(Currency::getCurrencyCode)
+                .map(String::valueOf)
+                .collect(Collectors.joining((",")));
         String url = NATIONAL_BANK_ROUT + codeCurrencies;
         return webClient
                 .get()
@@ -68,11 +67,10 @@ public class AlfaBankExchangeWithWebClient {
 
     }
 
-    private List<String> getDatesBetween() {
+    private List<String> getDatesBetween(int dateCount) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate startDate = LocalDate.now();
-        System.out.println(startDate);
-        LocalDate endDate = startDate.minusDays(numberOfDays);
+        LocalDate endDate = startDate.minusDays(dateCount);
         return endDate.datesUntil(startDate)
                 .map(dtf::format)
                 .collect(Collectors.toList());

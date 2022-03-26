@@ -85,8 +85,6 @@ public class BookDaoWithJdbcTemplate implements BookDao {
             resultQuery = jdbcTemplate
                     .query(GET_RATES_BY_COUNT_DAY, new BeanPropertyRowMapper<>(RateEntity.class), rateCount);
 
-            List<RateEntity> rateEntityList = jdbcTemplate
-                    .query(GET_ALL_RATES, new BeanPropertyRowMapper<>(RateEntity.class));
             log.info("Rates from data base successfully received");
 
         } catch (EmptyResultDataAccessException e) {

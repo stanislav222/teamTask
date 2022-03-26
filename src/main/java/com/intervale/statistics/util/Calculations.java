@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,25 +25,27 @@ public class Calculations {
                                 .divide(BigDecimal.valueOf(i.getQuantity()), 4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP)));
     }
 
-    public Map<String, BigDecimal> getStringBigDecimalMapForR(BigDecimal priceByTitle, List<RateEntity> saleRate) {
+    public Map<String, BigDecimal> getStringBigDecimalMapForR(Map<String, BigDecimal> booksCurrency, List<RateEntity> saleRate) {
 
         return saleRate.stream()
-                .collect(Collectors.toMap(RateEntity::getSellIso, price -> priceByTitle
-                        .divide(price.getBuyRate()
-                                .divide(BigDecimal.valueOf(price.getQuantity()), 4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP)));
+                .collect(Collectors.toMap(RateEntity::getSellIso, i ->
+                        withHistory(booksCurrency, i)
+                        .divide(i.getBuyRate()
+                                .divide(BigDecimal.valueOf(i.getQuantity()), 4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP)));
     }
 
-    private BigDecimal withHistory(Map<String, BigDecimal> booksCurrency, NationalRateDto i) {
+    private BigDecimal withHistory(Map<String, BigDecimal> booksCurrency, Object obj) {
         BigDecimal bigDecimal = null;
         Set<String> keys = booksCurrency.keySet();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        if (booksCurrency.containsKey(i.getDate())) {
-            bigDecimal = booksCurrency.get(i.getDate());
+        String date = getDate(obj);
+        if (booksCurrency.containsKey(date)) {
+            bigDecimal = booksCurrency.get(date);
         }else {
             String firstDate = keys.iterator().next();
             for (String key: keys){
                 LocalDate localDate = LocalDate.parse(key, formatter);
-                int compareTo = localDate.compareTo(LocalDate.parse(i.getDate(), formatter));
+                int compareTo = localDate.compareTo(LocalDate.parse(date, formatter));
                 if (compareTo < 0) {
                     bigDecimal = booksCurrency.get(key);
                 }else {
@@ -54,7 +57,23 @@ public class Calculations {
         return bigDecimal;
     }
 
+    private String getDate(Object obj) {
+        String date = null;
+        if (obj instanceof NationalRateDto) {
+             date = ((NationalRateDto) obj).getDate();
+        }
+        if (obj instanceof RateEntity) {
+            date = ((RateEntity) obj).getDate();
+        }
+        return date;
+    }
+
     public BigDecimal getCurrentPrice(Map<String, BigDecimal> historyOfBookChanges) {
-        return historyOfBookChanges.entrySet().stream().reduce((first, second) -> second).orElse(null).getValue();
+        return Objects.requireNonNull(historyOfBookChanges
+                .entrySet()
+                .stream()
+                .reduce((first, second) -> second)
+                .orElse(null))
+                .getValue();
     }
 }

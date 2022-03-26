@@ -1,6 +1,5 @@
 package com.intervale.statistics.sevice;
 
-import com.intervale.statistics.dao.BookDaoWithJdbcTemplate;
 import com.intervale.statistics.dao.BookDao;
 import com.intervale.statistics.exception.BookException;
 import com.intervale.statistics.exception.RateAlfaBankException;
@@ -47,17 +46,19 @@ public class BookService {
      *     где String - дата, BigDecimal - стоимость на эту дату
      *         Ошибка выполнения запроса - цена по названию книги не найдена, кидает BookException
      */
+
     public Map<String, BigDecimal> getHistoryOfBookChanges(String title) throws BookException {
         return Optional.ofNullable(bookDao.takeTheHistoryOfBookPriceChange(title))
                 .orElseThrow(() ->new BookException("Prices empty"));
     }
 
 
+
     public SimpleBankCurrencyExchangeRate getPriceByTitleWithCostInDifferentCurrenciesNB
-            (String title, List<Currency> currencies) throws BookException {
+            (String title, List<Currency> currencies, int date) throws BookException {
         Map<String, BigDecimal> historyOfBookChanges = getHistoryOfBookChanges(title);
         Map<String, Map<String, BigDecimal>> sorted = alfaBankExchangeClient
-                .getTheCurrentCurrencySaleRateWithRangeDate(currencies)
+                .getTheCurrentCurrencySaleRateWithRangeDate(currencies, date)
                 .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> calc.getStringBigDecimalMapForNR(historyOfBookChanges, e.getValue())))
@@ -74,24 +75,20 @@ public class BookService {
     }
 
 
+
     public SimpleBankCurrencyExchangeRate getPriceByTitleWithCostInDifferentCurrenciesAB
             (String title, List<Currency> currencies, Integer dayCount) throws BookException, RateAlfaBankException {
-
-        BigDecimal priceByTitle = getPriceByTitle(title);
+        Map<String, BigDecimal> historyOfBookChanges = getHistoryOfBookChanges(title);
         String currenciesName = currencies.stream().map(Enum::name).collect(Collectors.joining((",")));
-
-
-        Optional<List<RateEntity>> resultQueryDB = bookDaoWithJdbcTemplate.getListRate(dayCount);
+        Optional<List<RateEntity>> resultQueryDB = bookDao.getListRate(dayCount);
         List<RateEntity> rateEntityList = resultQueryDB.orElseThrow( () ->
                 new RateAlfaBankException("Error getting data from server"));
-
         Map<String, Map<String, BigDecimal>> sorted = rateEntityList.stream()
-
                 .filter(rate -> currenciesName.contains(rate.getSellIso()))
                 .collect(Collectors.groupingBy(RateEntity::getDate))
                 .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
-                        e -> calc.getStringBigDecimalMapForR(priceByTitle, e.getValue())))
+                        e -> calc.getStringBigDecimalMapForR(historyOfBookChanges, e.getValue())))
                 .entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
@@ -99,7 +96,7 @@ public class BookService {
 
         return SimpleBankCurrencyExchangeRate.builder()
                 .title(title)
-                .price(priceByTitle)
+                .price(calc.getCurrentPrice(historyOfBookChanges))
                 .nationalBankExchangeRate(sorted)
                 .build();
     }
