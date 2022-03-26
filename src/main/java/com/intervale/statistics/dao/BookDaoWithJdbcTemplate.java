@@ -19,12 +19,14 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Map;
+
 
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class BookDaoWithJdbcTemplate implements BookDao{
+public class BookDaoWithJdbcTemplate implements BookDao {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -74,16 +76,22 @@ public class BookDaoWithJdbcTemplate implements BookDao{
     }
 
     @Override
-    public List<RateEntity> getListRate(String dataRange) {
+    public Optional<List<RateEntity>> getListRate(Integer dayCount) {
+
+        List<RateEntity> resultQuery = null;
+        int rateCount = dayCount * 3;
 
         try {
+            resultQuery = jdbcTemplate
+                    .query(GET_RATES_BY_COUNT_DAY, new BeanPropertyRowMapper<>(RateEntity.class), rateCount);
+
             List<RateEntity> rateEntityList = jdbcTemplate
                     .query(GET_ALL_RATES, new BeanPropertyRowMapper<>(RateEntity.class));
             log.info("Rates from data base successfully received");
-            return rateEntityList;
+
         } catch (EmptyResultDataAccessException e) {
             log.error("Rates from data base do not received");
-            return null;
         }
+        return Optional.ofNullable(resultQuery);
     }
 }

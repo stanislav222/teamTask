@@ -1,7 +1,9 @@
 package com.intervale.statistics.sevice;
 
+import com.intervale.statistics.dao.BookDaoWithJdbcTemplate;
 import com.intervale.statistics.dao.BookDao;
 import com.intervale.statistics.exception.BookException;
+import com.intervale.statistics.exception.RateAlfaBankException;
 import com.intervale.statistics.external.alfabank.model.Currency;
 import com.intervale.statistics.external.alfabank.service.AlfaBankExchangeWithWebClient;
 import com.intervale.statistics.model.domain.SimpleBankCurrencyExchangeRate;
@@ -9,6 +11,7 @@ import com.intervale.statistics.model.entity.Book;
 import com.intervale.statistics.model.entity.RateEntity;
 import com.intervale.statistics.util.Calculations;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookService {
 
     private final BookDao bookDao;
@@ -71,10 +75,18 @@ public class BookService {
 
 
     public SimpleBankCurrencyExchangeRate getPriceByTitleWithCostInDifferentCurrenciesAB
-            (String title, List<Currency> currencies) throws BookException {
+            (String title, List<Currency> currencies, Integer dayCount) throws BookException, RateAlfaBankException {
+
         BigDecimal priceByTitle = getPriceByTitle(title);
         String currenciesName = currencies.stream().map(Enum::name).collect(Collectors.joining((",")));
-        Map<String, Map<String, BigDecimal>> sorted = bookDao.getListRate("").stream()
+
+
+        Optional<List<RateEntity>> resultQueryDB = bookDaoWithJdbcTemplate.getListRate(dayCount);
+        List<RateEntity> rateEntityList = resultQueryDB.orElseThrow( () ->
+                new RateAlfaBankException("Error getting data from server"));
+
+        Map<String, Map<String, BigDecimal>> sorted = rateEntityList.stream()
+
                 .filter(rate -> currenciesName.contains(rate.getSellIso()))
                 .collect(Collectors.groupingBy(RateEntity::getDate))
                 .entrySet().stream()

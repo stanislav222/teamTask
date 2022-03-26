@@ -2,6 +2,7 @@
 GET http://localhost:8080/api/v1/book/price/stat/Harry Potter/RUB,USD,EUR
 Accept: image/svg+xml
 
-###
-GET http://localhost:8080/api/v1/book/price/stat/Harry Potter/RUB
+### Цена книги в валюте, курс валюты берётся за количество дней указанных в dayCount
+GET http://localhost:8080/api/v1/book/price/stat/Harry Potter/RUB,USD,EUR?dayCount=5
 Accept: image/svg+xml
+

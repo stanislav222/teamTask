@@ -17,7 +17,7 @@ alfa-bank:
 statistics:
   notifications:
     daemon:
-      expiration-report-cron: "*/10 * * * * *"
+      expiration-report-cron: "0 0 12 * * *"
       timeZone: Europe/Moscow
 
 
