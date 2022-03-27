@@ -48,7 +48,7 @@ public class Calculations {
                 int compareTo = localDate.compareTo(LocalDate.parse(date, formatter));
                 if (compareTo < 0) {
                     bigDecimal = booksCurrency.get(key);
-                }else {
+                }else if (compareTo > 0 && bigDecimal == null){
                     bigDecimal = booksCurrency.get(firstDate);
                     return bigDecimal;
                 }

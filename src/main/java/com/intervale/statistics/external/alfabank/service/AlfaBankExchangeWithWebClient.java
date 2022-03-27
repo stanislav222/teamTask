@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class AlfaBankExchangeWithWebClient {
 
     private static final String NATIONAL_BANK_ROUT = "/partner/1.0.1/public/nationalRates?currencyCode=";
+    private static final String NATIONAL_BANK_ROUT_DATE = "&date={date}";
     private static final String ALFA_BANK_ROUT = "/partner/1.0.1/public/rates";
 
     @Qualifier("webClientAlfaBank")
@@ -36,24 +37,30 @@ public class AlfaBankExchangeWithWebClient {
                 .retrieve()
                 .bodyToMono(RateListResponseDto.class)
                 .blockOptional()
-                .orElseThrow(() -> new RuntimeException("Something went wrong"));
+                .orElseThrow(() ->
+                        new RuntimeException("The json format has changed or API Error: AB"));
         return rateList.getRates();
     }
 
-    public Map<String, List<NationalRateDto>> getTheCurrentCurrencySaleRateWithRangeDate(List<Currency> currencyList, int dateCount) {
+    public Map<String, List<NationalRateDto>> getTheCurrentCurrencySaleRateWithRangeDate
+            (List<Currency> currencyList, int dateCount) {
         List<String> dateRange = getDatesBetween(dateCount);
-        Flux<NationalRateListResponseDto> nationalRateListResponseDtoFlux = Flux.fromIterable(dateRange)
+        Flux<NationalRateListResponseDto> nationalRateListResponseDtoFlux =
+                Flux.fromIterable(dateRange)
                 .flatMap(date ->
                         getTheCurrentCurrencySaleRateWithDate(currencyList, date));
         Set<NationalRateListResponseDto> block = nationalRateListResponseDtoFlux
                 .collect(Collectors.toSet()).block();
-        assert block != null;
+        if(block == null){
+             throw new RuntimeException("The json format has changed or API Error: NB");
+        }
         return block.stream()
                 .flatMap(rate -> rate.getRates().stream())
                 .collect(Collectors.groupingBy(NationalRateDto::getDate));
     }
 
-    public Mono<NationalRateListResponseDto> getTheCurrentCurrencySaleRateWithDate(List<Currency> currencyList, String date) {
+    public Mono<NationalRateListResponseDto> getTheCurrentCurrencySaleRateWithDate
+            (List<Currency> currencyList, String date) {
         String codeCurrencies = currencyList.stream()
                 .map(Currency::getCurrencyCode)
                 .map(String::valueOf)
@@ -61,7 +68,7 @@ public class AlfaBankExchangeWithWebClient {
         String url = NATIONAL_BANK_ROUT + codeCurrencies;
         return webClient
                 .get()
-                .uri(url + "&date={date}", date)
+                .uri(url + NATIONAL_BANK_ROUT_DATE, date)
                 .retrieve()
                 .bodyToMono(NationalRateListResponseDto.class);
 

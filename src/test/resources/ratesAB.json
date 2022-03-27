@@ -1,0 +1,10 @@
+{"rates":
+  [
+    {"sellRate":3.400000,"sellIso":"EUR","sellCode":978,"buyRate":3.600000,"buyIso":"BYN","buyCode":933,"quantity":1,"name":"евро","date":"25.03.2022"},
+    {"sellRate":93.000000,"sellIso":"EUR","sellCode":978,"buyRate":113.000000,"buyIso":"RUB","buyCode":643,"quantity":1,"name":null,"date":"25.03.2022"},
+    {"sellRate":1.050000,"sellIso":"EUR","sellCode":978,"buyRate":1.130000,"buyIso":"USD","buyCode":840,"quantity":1,"name":null,"date":"25.03.2022"},
+    {"sellRate":3.200000,"sellIso":"RUB","sellCode":643,"buyRate":3.400000,"buyIso":"BYN","buyCode":933,"quantity":100,"name":"российских рублей","date":"25.03.2022"},
+    {"sellRate":3.100000,"sellIso":"USD","sellCode":840,"buyRate":3.300000,"buyIso":"BYN","buyCode":933,"quantity":1,"name":"доллар США","date":"25.03.2022"},
+    {"sellRate":85.000000,"sellIso":"USD","sellCode":840,"buyRate":100.000000,"buyIso":"RUB","buyCode":643,"quantity":1,"name":null,"date":"25.03.2022"}
+  ]
+}

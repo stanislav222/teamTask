@@ -3,7 +3,7 @@ package com.intervale.statistics.controller;
 import com.intervale.statistics.exception.BookException;
 import com.intervale.statistics.exception.GenerateException;
 import com.intervale.statistics.exception.RateAlfaBankException;
-import com.intervale.statistics.response.BookResponse;
+import com.intervale.statistics.response.SimpleResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,18 +16,23 @@ import java.util.List;
 public class ExceptionController {
 
     @ExceptionHandler(BookException.class)
-    public ResponseEntity<BookResponse> handleExceptionBookCreate(BookException e) {
-        return ResponseEntity.badRequest().body(new BookResponse(e.getMessage()));
+    public ResponseEntity<SimpleResponse> handleExceptionBookCreate(BookException e) {
+        return ResponseEntity.badRequest().body(new SimpleResponse(e.getMessage()));
     }
 
     @ExceptionHandler(GenerateException.class)
-    public ResponseEntity<BookResponse> handleExceptionGenerateFile(GenerateException e) {
-        return ResponseEntity.badRequest().body(new BookResponse(e.getMessage()));
+    public ResponseEntity<SimpleResponse> handleExceptionGenerateFile(GenerateException e) {
+        return ResponseEntity.badRequest().body(new SimpleResponse(e.getMessage()));
     }
 
     @ExceptionHandler(RateAlfaBankException.class)
-    public ResponseEntity<BookResponse> handleRateAlfaBankException(RateAlfaBankException e) {
-        return ResponseEntity.badRequest().body(new BookResponse(e.getMessage()));
+    public ResponseEntity<SimpleResponse> handleRateAlfaBankException(RateAlfaBankException e) {
+        return ResponseEntity.badRequest().body(new SimpleResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<SimpleResponse> handleExceptionBookCreate(RuntimeException e) {
+        return ResponseEntity.badRequest().body(new SimpleResponse(e.getMessage()));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

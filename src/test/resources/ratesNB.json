@@ -1,0 +1,7 @@
+{"rates":
+[
+  {"rate":2.930600,"iso":"EUR","code":978,"quantity":1,"date":"27.03.2022","name":"евро"},
+  {"rate":3.405200,"iso":"RUB","code":643,"quantity":100,"date":"27.03.2022","name":"российский рубль"},
+  {"rate":2.584600,"iso":"USD","code":840,"quantity":1,"date":"27.03.2022","name":"доллар США"}
+]
+}

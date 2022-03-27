@@ -1,79 +1,102 @@
 package com.intervale.statistics.util;
 
-import lombok.Data;
+import com.intervale.statistics.dto.NationalRateDto;
+import com.intervale.statistics.external.alfabank.model.Currency;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+@ExtendWith(MockitoExtension.class)
 class CalculationsTest {
 
-    public static void main(String[] args) {
+    private Calculations calculations;
+    private NationalRateDto rateDto;
+    private LinkedHashMap<String, BigDecimal> booksPriceChanges;
 
-        SimpleObject simpleObject3 = new SimpleObject();
-        simpleObject3.setDate("21.03.2022");
-        simpleObject3.setIso("RUB");
-        simpleObject3.setQuantity(100);
-        simpleObject3.setRate(new BigDecimal(1.0000));
-        List<SimpleObject> simpleObjects = List.of(simpleObject3);
-       // System.out.println(simpleObjects);
+    public static final BigDecimal BLR_TO_RUB_FOR_PRICE_7 = new BigDecimal("194.4444");
+    public static final BigDecimal BLR_TO_RUB_FOR_PRICE_8 = new BigDecimal("222.2222");
+    public static final BigDecimal BLR_TO_RUB_FOR_PRICE_9 = new BigDecimal("250.0000");
 
-        Map<String, BigDecimal> booksPriceChanges = new LinkedHashMap<>();
-        //booksPriceChanges.put("20.03.2022", new BigDecimal(1.0000));
-        //booksPriceChanges.put("22.03.2022", new BigDecimal(2.0000));
-        booksPriceChanges.put("24.03.2022", new BigDecimal(1));
-        booksPriceChanges.put("25.03.2022", new BigDecimal(2));
-        booksPriceChanges.put("26.03.2022", new BigDecimal(3));
+    @BeforeEach
+    void setupMockWebServer(){
+        calculations = new Calculations();
+        /*
+        * for the test I use NationalRateDto so the calculation is the same with RateDto
+        * */
+        rateDto = new NationalRateDto();
+        rateDto.setCode(Currency.RUB.getCurrencyCode());
+        rateDto.setIso(Currency.RUB.name());
+        rateDto.setQuantity(100);
+        rateDto.setRate(new BigDecimal("3.6000"));
 
-
-       // System.out.println(booksPriceChanges);
-
-        Map<String, BigDecimal> stringBigDecimalMapForNR = getStringBigDecimalMapForNR(booksPriceChanges, simpleObjects);
-        System.out.println(stringBigDecimalMapForNR);
+        booksPriceChanges = new LinkedHashMap<>();
+        booksPriceChanges.put("24.03.2022", new BigDecimal(7)); // date : price book
+        booksPriceChanges.put("25.03.2022", new BigDecimal(8));
+        booksPriceChanges.put("27.03.2022", new BigDecimal(9));
     }
 
-    public static Map<String, BigDecimal> getStringBigDecimalMapForNR(Map<String, BigDecimal> booksCurrency, List<SimpleObject> saleRate) {
-        return saleRate.stream()
-                .collect(Collectors.toMap(SimpleObject::getIso, i ->
-                        getObject(booksCurrency, i)
-                        .divide(i.getRate()
-                                .divide(BigDecimal.valueOf(i.getQuantity()), 4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP)));
+    @Test
+    void dateFromNationalRateBefore() {
+        //date before date's from HashMap, should take the price for the first date into Map : 7 BLR
+        rateDto.setDate("21.03.2022");
+        Map<String, BigDecimal> stringBigDecimalMapForNR = calculations
+                .getStringBigDecimalMapForNR(booksPriceChanges,
+                        List.of(rateDto));
+        Assertions.assertNotNull(stringBigDecimalMapForNR);
+        Assertions.assertEquals("RUB", stringBigDecimalMapForNR.keySet()
+                .iterator()
+                .next());
+        Assertions.assertEquals(BLR_TO_RUB_FOR_PRICE_7, stringBigDecimalMapForNR
+                .values()
+                .iterator()
+                .next());
     }
 
-    private static BigDecimal getObject(Map<String, BigDecimal> booksCurrency, SimpleObject i) {
-        BigDecimal bigDecimal = null;
-        Set<String> keys = booksCurrency.keySet();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        if (booksCurrency.containsKey(i.getDate())) {
-            bigDecimal = booksCurrency.get(i.getDate());
-        }else {
-            String firstDate = keys.iterator().next();
-            for (String key: keys){
-                LocalDate localDate = LocalDate.parse(key, formatter);
-                int compareTo = localDate.compareTo(LocalDate.parse(i.getDate(), formatter));
-                if (compareTo < 0) {
-                    bigDecimal = booksCurrency.get(key);
-                }else {
-                    bigDecimal = booksCurrency.get(firstDate);
-                    return bigDecimal;
-                }
-            }
-        }
-        return bigDecimal;
+    @Test
+    void dateFromNationalRateBetween() {
+        // date between 25 and 27, should take the price for the 25th : 8 BLR
+        rateDto.setDate("26.03.2022");
+        Map<String, BigDecimal> stringBigDecimalMapForNR = calculations
+                .getStringBigDecimalMapForNR(booksPriceChanges,
+                        List.of(rateDto));
+        Assertions.assertNotNull(stringBigDecimalMapForNR);
+        Assertions.assertEquals("RUB", stringBigDecimalMapForNR.keySet()
+                .iterator()
+                .next());
+        Assertions.assertEquals(BLR_TO_RUB_FOR_PRICE_8, stringBigDecimalMapForNR
+                .values()
+                .iterator()
+                .next());
     }
 
-    @Data
-    private static class SimpleObject {
-        String date;
-
-        private String iso;
-
-        private BigDecimal rate;
-
-        private Integer quantity;
-
+    @Test
+    void dateFromNationalRateSame() {
+        // the date is the same as the date from the Map : price 9 BLR
+        rateDto.setDate("27.03.2022");
+        Map<String, BigDecimal> stringBigDecimalMapForNR = calculations
+                .getStringBigDecimalMapForNR(booksPriceChanges,
+                        List.of(rateDto));
+        Assertions.assertNotNull(stringBigDecimalMapForNR);
+        Assertions.assertEquals("RUB", stringBigDecimalMapForNR.keySet()
+                .iterator()
+                .next());
+        Assertions.assertEquals(BLR_TO_RUB_FOR_PRICE_9, stringBigDecimalMapForNR
+                .values()
+                .iterator()
+                .next());
     }
+
+    @Test
+    void getLastPriceFromMap() {
+        BigDecimal currentPrice = calculations.getCurrentPrice(booksPriceChanges);
+        Assertions.assertEquals(currentPrice, new BigDecimal(9));
+    }
+
 }

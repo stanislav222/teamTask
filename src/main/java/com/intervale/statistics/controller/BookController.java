@@ -42,12 +42,12 @@ public class BookController {
             @PathVariable List<Currency> nameCurrency)
             throws BookException, GenerateException, RateAlfaBankException {
 
-        SimpleBankCurrencyExchangeRate currencies = bookService
-                    .getPriceByTitleWithCostInDifferentCurrenciesNB(title, nameCurrency, dayCount);
-
-
         //SimpleBankCurrencyExchangeRate currencies = bookService
-         //       .getPriceByTitleWithCostInDifferentCurrenciesAB(title, nameCurrency,dayCount);
+         //           .getPriceByTitleWithCostInDifferentCurrenciesNB(title, nameCurrency, dayCount);
+
+
+        SimpleBankCurrencyExchangeRate currencies = bookService
+                .getPriceByTitleWithCostInDifferentCurrenciesAB(title, nameCurrency,dayCount);
 
         byte[] bytesArray = formatFactory.getFormat(header).getBytesArray(currencies);
         return new ResponseEntity<>(bytesArray, HttpStatus.OK);
