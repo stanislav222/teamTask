@@ -28,6 +28,17 @@ public class BookController {
     private final BookService bookService;
     private final FormatFactory formatFactory;
 
+    /**
+     * getPriceByTitleWithCurrencyStatistics : получить цену по названию со статистикой валют
+     * @param header заголовок
+     * @param dayCount счетчик дней
+     * @param title наименование книги
+     * @param nameCurrency запрос по курсу
+     * @return при успешном возрощении выводит цену по названию со статистикой валют
+     * @throws BookException Ошибка выполнения запроса - цена по названию книги не найдена, кидает BookException
+     * @throws GenerateException Генерировать исключение
+     * @throws RateAlfaBankException  Тариф Альфа Банк Исключение
+     */
     @GetMapping(value = "/price/stat/{title}/{nameCurrency}",
             produces = {MediaType.APPLICATION_JSON_VALUE,
                         MediaType.APPLICATION_PDF_VALUE,

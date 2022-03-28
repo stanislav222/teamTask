@@ -14,11 +14,19 @@ import java.util.concurrent.Executor;
 @EnableScheduling
 @EnableAsync
 public class ScheduleConfiguration {
+    /**
+     * threadPoolTaskExecutor : Исполнитель задач пула потоков
+     * @return возрощает использованный поток
+     */
     @Bean
     public Executor threadPoolTaskExecutor() {
         return new ThreadPoolTaskExecutor();
     }
 
+    /**
+     * taskScheduler : диспетчер задач
+     * @return возрощает диспетчер задачи
+     */
     @Bean
     public TaskScheduler taskScheduler() {
         return new ConcurrentTaskScheduler();

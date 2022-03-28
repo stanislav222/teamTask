@@ -13,6 +13,9 @@ import java.util.Map;
 
 public interface BookDao {
 
+    /**
+     * SQL запросы
+     */
     String SELECT_BOOK_BY_TITLE = "select b.id, b.isbn, b.title, " +
             "b.author, b.sheets, b.weight, p.price as cost " +
             "from book b\n" +

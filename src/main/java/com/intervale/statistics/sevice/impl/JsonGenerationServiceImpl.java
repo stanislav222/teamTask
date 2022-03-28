@@ -19,11 +19,21 @@ public class JsonGenerationServiceImpl implements ResponseGenerator {
 
     private static final String FORMAT_TYPE = "application/json";
 
+    /**
+     * getResponseFormat : получить формат ответа application/json
+     * @return application/json
+     */
     @Override
     public String getResponseFormat() {
         return FORMAT_TYPE;
     }
 
+    /**
+     * getBytesArray : получить массив байтов
+     * @param rate SimpleBankCurrencyExchangeRate : Простой банковский курс обмена валюты
+     * @return  возрощает массив байтов
+     * @throws GenerateException GenerateException : Генерировать исключение
+     */
     @Override
     public byte[] getBytesArray(SimpleBankCurrencyExchangeRate<Map<String, Map<String, BigDecimal>>> rate) throws GenerateException {
         String stringJson = "";

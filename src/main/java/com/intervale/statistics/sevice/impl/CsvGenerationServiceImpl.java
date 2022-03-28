@@ -19,11 +19,21 @@ public class CsvGenerationServiceImpl implements ResponseGenerator {
 
     private static final String FORMAT_TYPE = "text/csv";
 
+    /**
+     * getResponseFormat : получить формат ответа text/csv
+     * @return возрощает формат ответа text/csv
+     */
     @Override
     public String getResponseFormat() {
         return FORMAT_TYPE;
     }
 
+    /**
+     * getBytesArray : получить массив байтов
+     * @param rate записать Csv в массив байтов
+     * @return возрощает массив байтов
+     * @throws GenerateException  Не могу создать csv
+     */
     @Override
     public byte[] getBytesArray(SimpleBankCurrencyExchangeRate<Map<String, Map<String, BigDecimal>>> rate) throws GenerateException {
         try {
@@ -41,6 +51,12 @@ public class CsvGenerationServiceImpl implements ResponseGenerator {
         }
     }
 
+    /**
+     * writeCsvInByteArray : записать Csv в массив байтов
+     * @param dto SimpleBankCurrencyExchangeRate :Простой банковский курс обмена валюты
+     * @return возрощает запись Csv в массив байтов
+     * @throws IOException исключение
+     */
     private ByteArrayOutputStream writeCsvInByteArray(
             SimpleBankCurrencyExchangeRate<Map<String, Map<String, BigDecimal>>> dto) throws IOException {
         ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
