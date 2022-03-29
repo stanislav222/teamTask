@@ -30,6 +30,10 @@ public class AlfaBankExchangeWithWebClient {
     @Qualifier("webClientAlfaBank")
     private final WebClient webClient;
 
+    /**
+     * getTheCurrentCurrencySaleRateAB : получить текущий курс продажи валюты Альфа банка
+     * @return возрощает текущий курс продажи
+     */
     public List<RateDto> getTheCurrentCurrencySaleRateAB(){
         RateListResponseDto rateList = webClient
                 .get()
@@ -42,6 +46,12 @@ public class AlfaBankExchangeWithWebClient {
         return rateList.getRates();
     }
 
+    /**
+     * getTheCurrentCurrencySaleRateWithRangeDate : получить текущий курс продажи валюты с датой диапазона
+     * @param currencyList валютный лист
+     * @param dateCount счетчик дней
+     * @return возрощает текущий курс продажи валюты с датой диапазона
+     */
     public Map<String, List<NationalRateDto>> getTheCurrentCurrencySaleRateWithRangeDate
             (List<Currency> currencyList, int dateCount) {
         List<String> dateRange = getDatesBetween(dateCount);
@@ -59,6 +69,12 @@ public class AlfaBankExchangeWithWebClient {
                 .collect(Collectors.groupingBy(NationalRateDto::getDate));
     }
 
+    /**
+     * getTheCurrentCurrencySaleRateWithDate : получить текущий курс продажи валюты с датой
+     * @param currencyList валютный лис
+     * @param date
+     * @return возрощает текущий курс продажи валюты с датой
+     */
     public Mono<NationalRateListResponseDto> getTheCurrentCurrencySaleRateWithDate
             (List<Currency> currencyList, String date) {
         String codeCurrencies = currencyList.stream()
@@ -74,6 +90,11 @@ public class AlfaBankExchangeWithWebClient {
 
     }
 
+    /**
+     * getDatesBetween : получить даты между
+     * @param dateCount счетчик дней
+     * @return возрощает даты между
+     */
     private List<String> getDatesBetween(int dateCount) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate startDate = LocalDate.now();

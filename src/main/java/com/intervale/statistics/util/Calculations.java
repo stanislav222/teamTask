@@ -17,6 +17,13 @@ import java.util.stream.Collectors;
 @Component
 public class Calculations {
 
+    /**
+     * getStringBigDecimalMapForNR : получить Map<String,BigDecimal> где String - дата,BigDecimal - стоимость на эту дату
+     * нац банка
+     * @param booksCurrency книга валют
+     * @param saleRate Map<String,BigDecimal> где String - дата,BigDecimal - стоимость на эту дату
+     * @return возрощает дату и валюту
+     */
     public Map<String, BigDecimal> getStringBigDecimalMapForNR(Map<String, BigDecimal> booksCurrency, List<NationalRateDto> saleRate) {
         return saleRate.stream()
                 .collect(Collectors.toMap(NationalRateDto::getIso, i ->
@@ -25,6 +32,13 @@ public class Calculations {
                                 .divide(BigDecimal.valueOf(i.getQuantity()), 4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP)));
     }
 
+    /**
+     * getStringBigDecimalMapForR : получить Map<String,BigDecimal> где String - дата,BigDecimal - стоимость на эту дату
+     *
+     * @param booksCurrency книга валют
+     * @param saleRate Map<String,BigDecimal> где String - дата,BigDecimal - стоимость на эту дату
+     * @return возрощает дату и валюту
+     */
     public Map<String, BigDecimal> getStringBigDecimalMapForR(Map<String, BigDecimal> booksCurrency, List<RateEntity> saleRate) {
 
         return saleRate.stream()
@@ -34,6 +48,12 @@ public class Calculations {
                                 .divide(BigDecimal.valueOf(i.getQuantity()), 4, RoundingMode.HALF_UP), 4, RoundingMode.HALF_UP)));
     }
 
+    /**
+     * withHistory : с историей
+     * @param booksCurrency  книга валют
+     * @param obj обьект
+     * @return возрощает валюту
+     */
     private BigDecimal withHistory(Map<String, BigDecimal> booksCurrency, Object obj) {
         BigDecimal bigDecimal = null;
         Set<String> keys = booksCurrency.keySet();
@@ -57,6 +77,11 @@ public class Calculations {
         return bigDecimal;
     }
 
+    /**
+     * getDate : возрощает дату
+     * @param obj
+     * @return возрощает дату
+     */
     private String getDate(Object obj) {
         String date = null;
         if (obj instanceof NationalRateDto) {
@@ -68,6 +93,11 @@ public class Calculations {
         return date;
     }
 
+    /**
+     * getCurrentPrice : получить текущую цену
+     * @param historyOfBookChanges сохранить в Map String это дата , BigDecimal это валюта
+     * @return возрощает валюту
+     */
     public BigDecimal getCurrentPrice(Map<String, BigDecimal> historyOfBookChanges) {
         return Objects.requireNonNull(historyOfBookChanges
                 .entrySet()

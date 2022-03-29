@@ -39,11 +39,21 @@ public class PdfGenerationServiceImpl implements ResponseGenerator {
     @Autowired(required = false)
     private ResponseGenerator responseGenerator;
 
+    /**
+     * getResponseFormat : получить формат ответа application/pdf
+     * @return возрозает application/pdf
+     */
     @Override
     public String getResponseFormat() {
         return FORMAT_TYPE;
     }
 
+    /**
+     * getBytesArray : получить массив байтов
+     * @param rate Простой банковский курс обмена валюты
+     * @return возрощает массив байтов
+     * @throws GenerateException GenerateException : Генерировать исключение
+     */
     @Override
     public byte[] getBytesArray(SimpleBankCurrencyExchangeRate<Map<String, Map<String, BigDecimal>>> rate)
             throws GenerateException {
@@ -70,6 +80,11 @@ public class PdfGenerationServiceImpl implements ResponseGenerator {
         return data;
     }
 
+    /**
+     * createPdfFile : создает pdf файл
+     * @param rate Простой банковский курс обмена валюты
+     * @throws GenerateException Генерировать исключение
+     */
     public void createPdfFile(SimpleBankCurrencyExchangeRate<Map<String, Map<String, BigDecimal>>> rate)
             throws GenerateException {
 

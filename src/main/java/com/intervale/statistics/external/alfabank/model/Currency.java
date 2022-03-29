@@ -7,10 +7,18 @@ public enum  Currency {
 
     private final int currencyCode;
 
+    /**
+     * Currency : Валюта
+     * @param currencyCode код валюты
+     */
     Currency(int currencyCode) {
         this.currencyCode = currencyCode;
     }
 
+    /**
+     * getCurrencyCode : получить код валюты
+     * @return возрощает код валют
+     */
     public int getCurrencyCode() {
         return currencyCode;
     }
