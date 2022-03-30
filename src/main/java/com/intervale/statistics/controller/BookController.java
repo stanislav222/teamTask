@@ -7,6 +7,7 @@ import com.intervale.statistics.external.alfabank.model.Currency;
 import com.intervale.statistics.model.domain.SimpleBankCurrencyExchangeRate;
 import com.intervale.statistics.sevice.BookService;
 import com.intervale.statistics.sevice.FormatFactory;
+import com.intervale.statistics.sevice.ResponseGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -49,7 +50,9 @@ public class BookController {
         SimpleBankCurrencyExchangeRate currencies = bookService
                 .getPriceByTitleWithCostInDifferentCurrenciesAB(title, nameCurrency,dayCount);
 
-        byte[] bytesArray = formatFactory.getFormat(header).getBytesArray(currencies);
+        ResponseGenerator responseGenerator = formatFactory.getFormat(header);
+        byte[] bytesArray = responseGenerator.getBytesArray(currencies);
+        //byte[] bytesArray = formatFactory.getFormat(header).getBytesArray(currencies);
         return new ResponseEntity<>(bytesArray, HttpStatus.OK);
     }
 
