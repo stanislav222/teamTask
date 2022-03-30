@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: insert_default_values
+      id: insert_values_in_table_rate
       author: Sergey
       comment: Add default values into table rate
       changes:
