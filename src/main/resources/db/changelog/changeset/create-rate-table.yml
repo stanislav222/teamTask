@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 3
+      id: create_table_rate
       author: Sergey
       changes:
         - createTable:

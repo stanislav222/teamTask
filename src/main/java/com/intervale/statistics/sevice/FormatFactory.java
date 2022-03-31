@@ -14,6 +14,10 @@ public class FormatFactory {
 
     private final Map<String, ResponseGenerator> viewerMap;
 
+    /**
+     * FormatFactory : Фабрика форматов
+     * @param viewers Генератор ответов
+     */
     @Autowired
     private FormatFactory(List<ResponseGenerator> viewers) {
         viewerMap =  viewers.stream().collect(Collectors
@@ -21,6 +25,11 @@ public class FormatFactory {
                         Function.identity()));
     }
 
+    /**
+     * getFormat : получить формат
+     * @param formatType
+     * @return
+     */
     public ResponseGenerator getFormat(String formatType) {
         return Optional.ofNullable(viewerMap.get(formatType))
                 .orElseThrow(IllegalArgumentException::new);

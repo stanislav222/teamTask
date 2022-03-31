@@ -7,6 +7,7 @@ import com.intervale.statistics.external.alfabank.model.Currency;
 import com.intervale.statistics.model.domain.SimpleBankCurrencyExchangeRate;
 import com.intervale.statistics.sevice.BookService;
 import com.intervale.statistics.sevice.FormatFactory;
+import com.intervale.statistics.sevice.ResponseGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,17 @@ public class BookController {
     private final BookService bookService;
     private final FormatFactory formatFactory;
 
+    /**
+     * getPriceByTitleWithCurrencyStatistics : получить цену по названию со статистикой валют
+     * @param header заголовок
+     * @param dayCount счетчик дней
+     * @param title наименование книги
+     * @param nameCurrency запрос по курсу
+     * @return при успешном возрощении выводит цену по названию со статистикой валют
+     * @throws BookException Ошибка выполнения запроса - цена по названию книги не найдена, кидает BookException
+     * @throws GenerateException Генерировать исключение
+     * @throws RateAlfaBankException  Тариф Альфа Банк Исключение
+     */
     @GetMapping(value = "/price/stat/{title}/{nameCurrency}",
             produces = {MediaType.APPLICATION_JSON_VALUE,
                         MediaType.APPLICATION_PDF_VALUE,
@@ -49,7 +61,9 @@ public class BookController {
         SimpleBankCurrencyExchangeRate currencies = bookService
                 .getPriceByTitleWithCostInDifferentCurrenciesAB(title, nameCurrency,dayCount);
 
-        byte[] bytesArray = formatFactory.getFormat(header).getBytesArray(currencies);
+        ResponseGenerator responseGenerator = formatFactory.getFormat(header);
+        byte[] bytesArray = responseGenerator.getBytesArray(currencies);
+        //byte[] bytesArray = formatFactory.getFormat(header).getBytesArray(currencies);
         return new ResponseEntity<>(bytesArray, HttpStatus.OK);
     }
 

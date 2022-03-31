@@ -29,11 +29,21 @@ public class SvgGenerationServiceImpl implements ResponseGenerator {
     private static final String SVG_DIRECTORY_PATH = "./src/main/resources/WEB-INF/img/";
     private static final String SVG_FILE_NAME = "result.svg";
 
+    /**
+     * getResponseFormat : получить формат ответа image/svg+xml
+     * @return image/svg+xml
+     */
     @Override
     public String getResponseFormat() {
         return FORMAT_TYPE;
     }
 
+    /**
+     * getBytesArray : получить массив байтов
+     * @param rate SimpleBankCurrencyExchangeRate : Простой банковский курс обмена валюты
+     * @return возрощает массив байтов
+     * @throws GenerateException GenerateException : Генерировать исключение
+     */
     @Override
     public byte[] getBytesArray(SimpleBankCurrencyExchangeRate<Map<String, Map<String, BigDecimal>>> rate) throws GenerateException {
         JFreeChart chart = createChart(rate);
@@ -58,6 +68,11 @@ public class SvgGenerationServiceImpl implements ResponseGenerator {
         return data;
     }
 
+    /**
+     * createChart : создать диаграмму
+     * @param rate SimpleBankCurrencyExchangeRate : Простой банковский курс обмена валюты
+     * @return возрощает диаграмму
+     */
     private JFreeChart createChart(SimpleBankCurrencyExchangeRate<Map<String, Map<String, BigDecimal>>> rate) {
         DefaultStatisticalCategoryDataset dataset = new DefaultStatisticalCategoryDataset();
         rate.getNationalBankExchangeRate().forEach((date, stringBigDecimalMap) -> {

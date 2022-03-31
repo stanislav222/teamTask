@@ -30,6 +30,11 @@ public class BookDaoWithJdbcTemplate implements BookDao {
 
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * getCurrentPriceByTitle : получить текущую цену по названию
+     * @param title название книги
+     * @return получить текущую цену по названию
+     */
     @Override
     public Book getCurrentPriceByTitle(String title) {
         try {
@@ -43,6 +48,11 @@ public class BookDaoWithJdbcTemplate implements BookDao {
         }
     }
 
+    /**
+     * takeTheHistoryOfBookPriceChange : взять историю изменения цен на книги
+     * @param title история книги
+     * @return возрощает историю измениение цен на книги
+     */
     @Override
     public Map<String, BigDecimal> takeTheHistoryOfBookPriceChange(String title) {
         try {
@@ -61,6 +71,11 @@ public class BookDaoWithJdbcTemplate implements BookDao {
         }
     }
 
+    /**
+     * addRate : добавить ставку
+     * @param rateEntity ставка
+     * @return Оценка успешно сохранена в базе данных
+     */
     @Override
     public boolean addRate(RateEntity rateEntity) {
         try {
@@ -75,6 +90,11 @@ public class BookDaoWithJdbcTemplate implements BookDao {
         }
     }
 
+    /**
+     *  getListRate : получить прейскурантную ставку
+     * @param dayCount счетчик дней
+     * @return  Курсы из базы данных успешно получены
+     */
     @Override
     public Optional<List<RateEntity>> getListRate(Integer dayCount) {
 

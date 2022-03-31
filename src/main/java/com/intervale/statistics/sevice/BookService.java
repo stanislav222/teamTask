@@ -53,7 +53,14 @@ public class BookService {
     }
 
 
-
+    /**
+     * getPriceByTitleWithCostInDifferentCurrenciesNB : получить цену по названию с ценой в разных валютах нац банка
+     * @param title
+     * @param currencies валюты
+     * @param date
+     * @return успешный запрос возрощает валюты по нац банку
+     * @throws BookException Ошибка выполнения запроса - цена по названию книги не найдена, кидает BookException
+     */
     public SimpleBankCurrencyExchangeRate getPriceByTitleWithCostInDifferentCurrenciesNB
             (String title, List<Currency> currencies, int date) throws BookException {
         Map<String, BigDecimal> historyOfBookChanges = getHistoryOfBookChanges(title);
@@ -75,7 +82,15 @@ public class BookService {
     }
 
 
-
+    /**
+     * getPriceByTitleWithCostInDifferentCurrenciesAB : получить цену по названию со стоимостью в разных валютах Альфа Б
+     * @param title
+     * @param currencies валюты
+     * @param dayCount счетчик дней
+     * @return успешный запрос возрощает курс альфа банка
+     * @throws BookException Ошибка выполнения запроса - цена по названию книги не найдена, кидает BookException
+     * @throws RateAlfaBankException Ошибка выполнения запроса
+     */
     public SimpleBankCurrencyExchangeRate getPriceByTitleWithCostInDifferentCurrenciesAB
             (String title, List<Currency> currencies, Integer dayCount) throws BookException, RateAlfaBankException {
         Map<String, BigDecimal> historyOfBookChanges = getHistoryOfBookChanges(title);

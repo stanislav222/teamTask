@@ -20,6 +20,9 @@ public class CollectingCourseStatistics {
     private final BookDao bookDao;
     private final AlfaBankExchangeWithWebClient webClient;
 
+    /**
+     * report : отчет о  текущем курсе продажи валюты Альфа банка
+     */
     @Scheduled(cron = "${statistics.notifications.daemon.expiration-report-cron}",
             zone = "${statistics.notifications.daemon.timeZone}")
     public void report() {
