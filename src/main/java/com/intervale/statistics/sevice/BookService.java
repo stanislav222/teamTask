@@ -41,15 +41,17 @@ public class BookService {
 
     /**
      * getPriceByTitle : цены книги по названию книги из БД
+     *
      * @param title Название книги
      * @return Успешное выполнение запроса возвращает - цены в формате Map<String, BigDecimal>,
-     *     где String - дата, BigDecimal - стоимость на эту дату
-     *         Ошибка выполнения запроса - цена по названию книги не найдена, кидает BookException
+     * где String - дата, BigDecimal - стоимость на эту дату
+     * Ошибка выполнения запроса - цена по названию книги не найдена, кидает BookException
      */
 
     public Map<String, BigDecimal> getHistoryOfBookChanges(String title) throws BookException {
-        return Optional.ofNullable(bookDao.takeTheHistoryOfBookPriceChange(title))
-                .orElseThrow(() ->new BookException("Prices empty"));
+        Map<String, BigDecimal> stringBigDecimalMap = bookDao.takeTheHistoryOfBookPriceChange(title);
+        return Optional.ofNullable(stringBigDecimalMap.size() != 0 ? stringBigDecimalMap : null)
+                .orElseThrow(() ->new BookException(String.format("Prices not found by title %s", title)));
     }
 
 

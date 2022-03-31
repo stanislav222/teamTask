@@ -60,7 +60,6 @@ public class BookController {
 
         SimpleBankCurrencyExchangeRate currencies = bookService
                 .getPriceByTitleWithCostInDifferentCurrenciesAB(title, nameCurrency,dayCount);
-
         ResponseGenerator responseGenerator = formatFactory.getFormat(header);
         byte[] bytesArray = responseGenerator.getBytesArray(currencies);
         //byte[] bytesArray = formatFactory.getFormat(header).getBytesArray(currencies);

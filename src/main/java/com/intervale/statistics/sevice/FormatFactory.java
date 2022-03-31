@@ -32,6 +32,6 @@ public class FormatFactory {
      */
     public ResponseGenerator getFormat(String formatType) {
         return Optional.ofNullable(viewerMap.get(formatType))
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new IllegalArgumentException("Invalid format"));
     }
 }

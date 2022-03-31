@@ -16,7 +16,7 @@ import java.util.List;
 public class ExceptionController {
 
     @ExceptionHandler(BookException.class)
-    public ResponseEntity<SimpleResponse> handleExceptionBookCreate(BookException e) {
+    public ResponseEntity<SimpleResponse> handleExceptionGet(BookException e) {
         return ResponseEntity.badRequest().body(new SimpleResponse(e.getMessage()));
     }
 
@@ -31,7 +31,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<SimpleResponse> handleExceptionBookCreate(RuntimeException e) {
+    public ResponseEntity<SimpleResponse> handleExceptionRuntime(RuntimeException e) {
         return ResponseEntity.badRequest().body(new SimpleResponse(e.getMessage()));
     }
 

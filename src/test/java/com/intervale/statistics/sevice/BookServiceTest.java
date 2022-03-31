@@ -115,7 +115,8 @@ class BookServiceTest {
         assertEquals(message, bookException.getMessage());
         verify(bookDao, times(1)).getCurrentPriceByTitle(anyString());
     }
-
+    /*
+    @Ignore
     @Test
     void getHistoryOfBookChanges() throws BookException {
 
@@ -126,22 +127,8 @@ class BookServiceTest {
         verify(bookDao, times(2)).takeTheHistoryOfBookPriceChange(anyString());
     }
 
-    @Test
-    void getHistoryOfBookChangesThrowBookException() {
-
-        when(bookDao.takeTheHistoryOfBookPriceChange(anyString())).thenReturn(null);
-
-        String message = "Prices empty";
-        BookException bookException = assertThrows(BookException.class,
-                () -> bookService.getHistoryOfBookChanges(anyString()));
-        assertEquals(message, bookException.getMessage());
-        verify(bookDao, times(1)).takeTheHistoryOfBookPriceChange(anyString());
-
-
-    }
-
-    @Test
     @Ignore
+    @Test
     void getPriceByTitleWithCostInDifferentCurrenciesNB() throws BookException {
 
         when(bookDao.takeTheHistoryOfBookPriceChange(anyString())).thenReturn(testHistoryOfBookChanges);
@@ -153,6 +140,14 @@ class BookServiceTest {
         assertEquals(testSimpleBankCurrencyExchangeRate,
                 bookService.getPriceByTitleWithCostInDifferentCurrenciesNB(title, currencyList, 5));
 
+    }*/
+
+    @Test
+    void getHistoryOfBookChangesThrowBookException() {
+        when(bookDao.takeTheHistoryOfBookPriceChange(anyString())).thenReturn(null);
+        NullPointerException bookException = assertThrows(NullPointerException.class,
+                () -> bookService.getHistoryOfBookChanges(anyString()));
+        verify(bookDao, times(1)).takeTheHistoryOfBookPriceChange(anyString());
     }
 
     @Test
